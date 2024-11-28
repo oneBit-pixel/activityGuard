@@ -1,0 +1,13 @@
+dir mapping:
+com.activityGuard.confuseapp -》 oVkD.N6ry.m0k9
+com.ndk.view -》 oVkD.N6ry.L6vU
+com.activityGuard.confuseapp11 -》 ML8M.II0i.Nc8e
+com.activityGuard.confuseapp22 -》 ML8M.II0i.hlif
+
+
+
+class mapping:
+com.ndk.view.PlayView -> oVkD.N6ry.L6vU.KboN
+com.activityGuard.confuseapp.MainActivity -> oVkD.N6ry.m0k9.Bt2D
+com.activityGuard.confuseapp.MainActivity1 -> oVkD.N6ry.m0k9.HXWb
+com.activityGuard.confuseapp.MainActivity2 -> oVkD.N6ry.m0k9.k4kP
