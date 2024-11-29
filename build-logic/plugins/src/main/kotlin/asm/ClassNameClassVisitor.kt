@@ -3,6 +3,7 @@ package com.kotlin.asm
 import com.kotlin.model.ObfuscatorMapping
 import com.kotlin.util.isDebug
 import com.kotlin.util.logDebug
+import com.kotlin.util.toJson
 import org.objectweb.asm.AnnotationVisitor
 import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.FieldVisitor
@@ -28,7 +29,9 @@ class ClassNameClassVisitor(
         interfaces: Array<out String>?
     ) {
 //        isDebug = name == "com/ndk/view/PlayView"
-        println("----------visit " + " version " + version + "   " + " access " + access + "   " + " name " + name + "   " + " signature " + signature + "   " + " superName " + superName + "   " + " interfaces " + interfaces?.joinToString { it })
+        if (name =="com/ndk/model1/ModelActivity1" || name=="com/activityGuard/view/PlayView" || name=="com/duiud/bobo/App"){
+            println("----------visit " + " version " + version + "   " + " access " + access + "   " + " name " + name + "   " + " signature " + signature + "   " + " superName " + superName + "   " + " interfaces " + interfaces?.joinToString { it })
+        }
         super.visit(
             version,
             access,

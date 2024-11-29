@@ -1,8 +1,10 @@
 package com.kotlin
 
+import com.android.build.api.artifact.ScopedArtifact
 import com.android.build.api.artifact.impl.ArtifactsImpl
 import com.android.build.api.instrumentation.InstrumentationScope
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
+import com.android.build.api.variant.ScopedArtifacts
 import com.android.build.gradle.AppPlugin
 import com.android.build.gradle.internal.scope.InternalArtifactType
 import com.kotlin.asm.ClassNameTransform
@@ -46,16 +48,30 @@ class ObfuscatorPlugin : Plugin<Project> {
                     it.aaptProguardFile.set(artifacts.get(InternalArtifactType.AAPT_PROGUARD_FILE))
                     it.outputFile.set(project.layout.buildDirectory.file("intermediates/${taskName}/mapping.txt"))
                 }
+
                 //注册asm
                 variant.instrumentation.transformClassesWith(
                     ClassNameTransform::class.java,
-                    InstrumentationScope.PROJECT
+                    InstrumentationScope.ALL
                 ) { params ->
-                    params.classMapping.set(taskProvider.get().outputFile.map { out ->
-                        val file = out.asFile
-                        fileToClassMappingMap(file)
-                    })
+                    params.classMapping.set(
+                        taskProvider.flatMap {
+                            it.outputFile.map { out ->
+                                val file = out.asFile
+                                fileToClassMappingMap(file)
+                            }
+                        })
+
                 }
+                variant.artifacts.forScope(ScopedArtifacts.Scope.ALL)
+                    .use(project.tasks.register<TransformClassTask>("${variant.name}TransformTask"))
+                    .toTransform(
+                        ScopedArtifact.CLASSES,
+                        TransformClassTask::allJars,
+                        TransformClassTask::allDirectories,
+                        TransformClassTask::output
+                    )
+
 
             }
         }

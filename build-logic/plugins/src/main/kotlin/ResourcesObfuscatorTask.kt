@@ -7,7 +7,7 @@ import com.kotlin.model.ActivityGuardExtension
 import com.kotlin.model.ClassInfo
 import com.kotlin.util.ObfuscatorUtil
 import com.kotlin.util.changeLayoutXmlName
-import com.kotlin.util.changeManifestActivityName
+import com.kotlin.util.changeXmlNodeAttribute
 import com.kotlin.util.createDirAndFile
 import com.kotlin.util.mappingFileToMap
 import com.kotlin.util.readByte
@@ -29,12 +29,14 @@ import kotlin.io.path.Path
  * 2024/11/18
  */
 abstract class ResourcesObfuscatorTask : DefaultTask() {
+
+
     @get:InputFile
     @get:PathSensitive(PathSensitivity.NAME_ONLY)
     abstract val bundleResFiles: RegularFileProperty
 
 
-    @get:InputFiles
+    @get:InputFile
     @get:PathSensitive(PathSensitivity.RELATIVE)
     abstract val aaptProguardFile: RegularFileProperty
 
@@ -116,7 +118,16 @@ abstract class ResourcesObfuscatorTask : DefaultTask() {
         //修改并保存 AndroidManifest.xml
         val manifest = "AndroidManifest.xml"
         val xmlNode = Resources.XmlNode.parseFrom(readByte(bundleZip, manifest))
-        val newXmlNode = changeManifestActivityName(xmlNode, classMapping)
+        //val newXmlNode = changeManifestActivityName(xmlNode, classMapping)
+        var newXmlNode = xmlNode
+        mapOf(
+            "activity" to "name",
+            "service" to "name",
+            "application" to "name",
+            "provider" to "name",
+        ).forEach {
+            newXmlNode = changeXmlNodeAttribute(newXmlNode, it.key, it.value, classMapping)
+        }
         createDirAndFile(dirName, manifest).outputStream()
             .use { newXmlNode.writeTo(it) }
         //关闭bundleResFiles文件
@@ -218,6 +229,7 @@ abstract class ResourcesObfuscatorTask : DefaultTask() {
      * 生成混淆后目录
      */
     private fun generateDirName(dirName: String): String {
+        return dirName
         val function = actGuard.obfuscatorDirFunction
         return function?.invoke(dirName) ?: ObfuscatorUtil.getObfuscatedClassDir(dirName)
     }
@@ -226,6 +238,7 @@ abstract class ResourcesObfuscatorTask : DefaultTask() {
      * 生成混淆后目录
      */
     private fun generateClassName(className: String): String {
+        return "Aaaaa$className"
         val function = actGuard.obfuscatorClassFunction
         return function?.invoke(className) ?: ObfuscatorUtil.getObfuscatedClassName()
 

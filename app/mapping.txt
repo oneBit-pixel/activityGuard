@@ -1,13 +1,16 @@
 dir mapping:
-com.activityGuard.confuseapp -》 oVkD.N6ry.m0k9
-com.ndk.view -》 oVkD.N6ry.L6vU
-com.activityGuard.confuseapp11 -》 ML8M.II0i.Nc8e
-com.activityGuard.confuseapp22 -》 ML8M.II0i.hlif
+com.activityGuard.confuseapp -》 com.activityGuard.confuseapp
+com.ndk.model1 -》 com.ndk.model1
+com.activityGuard.view -》 com.activityGuard.view
 
 
 
 class mapping:
-com.ndk.view.PlayView -> oVkD.N6ry.L6vU.KboN
-com.activityGuard.confuseapp.MainActivity -> oVkD.N6ry.m0k9.Bt2D
-com.activityGuard.confuseapp.MainActivity1 -> oVkD.N6ry.m0k9.HXWb
-com.activityGuard.confuseapp.MainActivity2 -> oVkD.N6ry.m0k9.k4kP
+com.activityGuard.confuseapp.MainActivity -> com.activityGuard.confuseapp.AaaaaMainActivity
+com.activityGuard.confuseapp.MainActivity1 -> com.activityGuard.confuseapp.AaaaaMainActivity1
+com.activityGuard.confuseapp.MainActivity2 -> com.activityGuard.confuseapp.AaaaaMainActivity2
+com.activityGuard.confuseapp.MyApp -> com.activityGuard.confuseapp.AaaaaMyApp
+com.activityGuard.confuseapp.MyService -> com.activityGuard.confuseapp.AaaaaMyService
+com.ndk.model1.ModelActivity1 -> com.ndk.model1.AaaaaModelActivity1
+com.ndk.model1.ModelActivity2 -> com.ndk.model1.AaaaaModelActivity2
+com.activityGuard.view.PlayView -> com.activityGuard.view.AaaaaPlayView

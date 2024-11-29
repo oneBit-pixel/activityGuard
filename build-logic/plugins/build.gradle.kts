@@ -19,6 +19,7 @@ dependencies {
     implementation("com.google.protobuf:protobuf-java:3.21.12")
     implementation("com.google.guava:guava:27.0.1-jre")
 
+
     testImplementation("junit:junit:4.13")
 
     compileOnly("com.android.tools.build:aapt2-proto:8.1.4-10154469")
@@ -42,7 +43,7 @@ publishing {
     publications {
         create<MavenPublication>("publishToMavenLocal") {
             from(components["java"])
-            groupId = "com.obfuscator.activityGuard"
+            groupId = "com.obfuscator"
             artifactId = "activityGuard"
             version = "1.0.0"
         }
@@ -52,25 +53,25 @@ publishing {
     }
 
 
-    publications {
-        create<MavenPublication>("publishToMavenService") {
-            from(components["java"])
-            groupId = "com.obfuscator.activityGuard"
-            artifactId = "activityGuard"
-            version = "1.0.0"
-        }
-
-        repositories {
-            maven {
-                isAllowInsecureProtocol = true
-                url = uri("http://192.168.3.241:8081/repository/maven-releases/")
-                credentials {
-                    username = "admin"
-                    password = "Bnic2SLEf"
-                }
-            }
-        }
-    }
+//    publications {
+//        create<MavenPublication>("publishToMavenService") {
+//            from(components["java"])
+//            groupId = "com.obfuscator.activityGuard"
+//            artifactId = "activityGuard"
+//            version = "1.0.0"
+//        }
+//
+//        repositories {
+//            maven {
+//                isAllowInsecureProtocol = true
+//                url = uri("http://192.168.3.241:8081/repository/maven-releases/")
+//                credentials {
+//                    username = "admin"
+//                    password = "Bnic2SLEf"
+//                }
+//            }
+//        }
+//    }
 
 
 }

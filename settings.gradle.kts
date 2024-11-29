@@ -1,5 +1,10 @@
 import java.net.URI
 
+include(":model1")
+
+
+
+
 pluginManagement {
     includeBuild("build-logic")
     repositories {
