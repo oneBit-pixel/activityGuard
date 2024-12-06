@@ -15,7 +15,6 @@ import com.kotlin.util.saveClassMappingFile
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.tasks.InputFile
-import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
@@ -103,8 +102,8 @@ abstract class ResourcesObfuscatorTask : DefaultTask() {
             out.write(resourceTableByte)
         }
         //修改并保存res
-        val resourceTable = Resources.ResourceTable.parseFrom(resourceTableByte)
-        ResourcesUtils.getAllFileReferences(resourceTable).map { path ->
+        bundleZip.entries().asSequence().filter { it.name.startsWith("res/") }.forEach { zipEntry ->
+            val path = zipEntry.name
             if (path.startsWith("res/layout")) {
                 val xmlNode = changeLayoutXmlName(bundleZip, path.toString(), classMapping)
                 createDirAndFile(dirName, path.toString()).outputStream()
@@ -115,6 +114,19 @@ abstract class ResourcesObfuscatorTask : DefaultTask() {
                 }
             }
         }
+//        //修改并保存res
+//        val resourceTable = Resources.ResourceTable.parseFrom(resourceTableByte)
+//        ResourcesUtils.getAllFileReferences(resourceTable).map { path ->
+//            if (path.startsWith("res/layout")) {
+//                val xmlNode = changeLayoutXmlName(bundleZip, path.toString(), classMapping)
+//                createDirAndFile(dirName, path.toString()).outputStream()
+//                    .use { xmlNode.writeTo(it) }
+//            } else {
+//                createDirAndFile(dirName, path.toString()).outputStream().use { out ->
+//                    out.write(readByte(bundleZip, path.toString()))
+//                }
+//            }
+//        }
         //修改并保存 AndroidManifest.xml
         val manifest = "AndroidManifest.xml"
         val xmlNode = Resources.XmlNode.parseFrom(readByte(bundleZip, manifest))

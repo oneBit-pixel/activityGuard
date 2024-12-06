@@ -2,7 +2,10 @@ package com.kotlin.model
 
 import com.kotlin.util.logDebug
 import com.kotlin.util.toJson
+import org.objectweb.asm.ConstantDynamic
+import org.objectweb.asm.Handle
 import org.objectweb.asm.Type
+import java.io.File
 
 /**
  * Created by DengLongFei
@@ -12,19 +15,46 @@ class ObfuscatorMapping(
     private val classMapping: Map<String, String> = mapOf()
 ) {
 
+    /**
+     * 混淆文件路径
+     */
+    fun obfuscatorFilePath(name: String): String {
+        val list = name.split(".")
+        val suffix = list.lastOrNull() ?: ""
+        val path = list.firstOrNull() ?: ""
+        val newFile = classMapping[path.replace(File.separator, "/")]
+        return if (newFile.isNullOrEmpty()) {
+            name
+        } else {
+            newFile.replace("/", File.separator) + "." + suffix
+        }
+    }
+
 
     /**
      * 混淆类名
      */
     fun obfuscatorName(name: String?): String? {
-        return name.toObfuscatorName()
+        return obfuscatorDescriptorOrName(name)
     }
 
     /**
      * 混淆类型描述
      */
     fun obfuscatorDescriptor(name: String?): String? {
-        return name.toObfuscatorDescriptor()
+        return obfuscatorDescriptorOrName(name)
+    }
+    /**
+     * 混淆类型类型签名
+     * Landroid/widget/ArrayAdapter<Ljava/lang/CharSequence;>;
+     * Ljava/util/WeakHashMap<Landroid/view/View;Ljava/lang/ref/WeakReference<*>;>;
+     * Landroidx/databinding/adapters/ObservableListAdapter$1;
+     * <V:Landroidx/compose/animation/core/AnimationVector;>Ljava/lang/Object;
+     * <V:Landroidx/compose/animation/core/AnimationVector;>Ljava/lang/Object;
+     * Landroidx/compose/animation/core/Animatable<Landroidx/compose/ui/geometry/Offset;Landroidx/compose/animation/core/AnimationVector2D;>;
+     */
+    fun obfuscatorSignature(signature: String?): String? {
+        return signature
     }
 
     /**
@@ -34,6 +64,55 @@ class ObfuscatorMapping(
         return type.toObfuscatorType()
     }
 
+    /**
+     *混淆Handle
+     */
+    fun obfuscatorHandle(handle: Handle?): Handle? {
+        handle?:return null
+        return Handle(
+            handle.tag,
+            obfuscatorName(handle.owner),
+            handle.name,
+            obfuscatorDescriptor(handle.desc)
+        )
+    }
+
+    /**
+     *混淆ConstantDynamic
+     */
+    fun obfuscatorConstantDynamic(value:ConstantDynamic) {
+        val list = arrayListOf<Any?>()
+        repeat(value.bootstrapMethodArgumentCount) { index ->
+            val it = value.getBootstrapMethodArgument(index)
+            list.add(obfuscatorBootstrapMethodArgumentsItem(it))
+        }
+        val newBootstrapMethodArguments = list.toTypedArray()
+        ConstantDynamic(
+            value.name,
+            obfuscatorDescriptor(value.descriptor),
+            value.bootstrapMethod?.let {
+                obfuscatorHandle(it)
+            },
+            *newBootstrapMethodArguments
+        )
+    }
+
+
+     fun obfuscatorBootstrapMethodArgumentsItem(it: Any?): Any? {
+        return when (it) {
+            is Type -> {
+                obfuscatorType(it)
+            }
+
+            is Handle -> {
+                obfuscatorHandle(it)
+            }
+            is ConstantDynamic->{
+                obfuscatorConstantDynamic(it)
+            }
+            else -> it
+        }
+    }
 
     /**
      * 获取混淆后类名
@@ -48,7 +127,7 @@ class ObfuscatorMapping(
         } else {
             classMapping[name] ?: name
         }.also {
-            logDebug("----------getObfuscatorName  old  $name    new $it")
+            logDebug("-----------getObfuscatorName  old  $name    new $it")
         }
 
     }
@@ -72,19 +151,14 @@ class ObfuscatorMapping(
     /**
      * 混淆类名或者描述符
      */
-    private fun obfuscatorDescriptorOrName(name: String?): String? {
+    @Synchronized
+    fun obfuscatorDescriptorOrName(name: String?): String? {
         name ?: return null
-        val regex = Regex("L([^;]+);")
-        return if (regex.matches(name)) {
-            return regex.replace(name) { matchResult ->
-                val originalClass = matchResult.groupValues[1]
-                val replacedClass = originalClass.toObfuscatorName()
-                "L$replacedClass;" // 返回替换后的类描述符
-            }
+        return if (name.startsWith("L") || name.startsWith("(") || name.startsWith("[")) {
+            name.toObfuscatorDescriptor()
         } else {
             name.toObfuscatorName()
         }
-
     }
 
 
@@ -113,10 +187,41 @@ class ObfuscatorMapping(
                 return Type.getObjectType(newClassName)
             }
 
+            Type.ARRAY -> {
+                val elementType = this.elementType
+                val newElementType = elementType.toObfuscatorType()
+                return Type.getType("[".repeat(this.dimensions) + newElementType.descriptor)
+            }
+
             else -> {
                 this
             }
         }
+    }
+
+    /**
+     * 混淆类文件名称
+     */
+    fun obfuscatorFileSourceName(source: String?): String? {
+        source ?: return null
+        val list = source.split(".")
+
+        val fileName = list.firstOrNull() ?: ""
+        val suffixName = list.lastOrNull() ?: ""
+
+        val newFile = fileNameMap[fileName]
+        return if (newFile.isNullOrEmpty()) {
+            return source
+        } else {
+            "$newFile.$suffixName"
+        }
+
+    }
+
+    private val fileNameMap by lazy {
+        classMapping.asSequence().map {
+            it.key.split("/").lastOrNull() to it.value.split("/").lastOrNull()
+        }.toMap()
     }
 
 }
