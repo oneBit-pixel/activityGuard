@@ -169,8 +169,9 @@ class ObfuscatorMapping(
         return when (this.sort) {
             Type.METHOD -> {
                 // 方法类型，需要解析参数和返回类型
-                val argumentTypes = Type.getArgumentTypes(this.descriptor)
-                val returnType = Type.getReturnType(this.descriptor)
+                val methodType = Type.getMethodType(this.descriptor)
+                val argumentTypes = methodType.argumentTypes
+                val returnType = methodType.returnType
                 logDebug("-----argumentTypes " + argumentTypes.toJson())
                 logDebug("-----returnType " + returnType.toJson())
                 // 替换参数和返回类型

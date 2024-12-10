@@ -9,6 +9,7 @@ import org.objectweb.asm.Handle
 import org.objectweb.asm.Label
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.TypePath
+import kotlin.math.log
 
 /**
  * Created by DengLongFei
@@ -102,6 +103,7 @@ class ClassNameMethodVisitor(
         logDebug("----------visitInvokeDynamicInsn  name " + name + "   " + " descriptor " + descriptor + "   " + " bootstrapMethodHandle " + bootstrapMethodHandle.toJson() + "   " + "\n bootstrapMethodArguments " + bootstrapMethodArguments.toJson())
         val newBootstrapMethodArguments =
             obfuscatorBootstrapMethodArguments(bootstrapMethodArguments)
+        logDebug("----------visitInvokeDynamicInsn newBootstrapMethodArguments "+newBootstrapMethodArguments.toJson())
         super.visitInvokeDynamicInsn(
             name, obfuscatorMapping.obfuscatorDescriptor(descriptor),
             obfuscatorMapping.obfuscatorHandle(bootstrapMethodHandle), *newBootstrapMethodArguments

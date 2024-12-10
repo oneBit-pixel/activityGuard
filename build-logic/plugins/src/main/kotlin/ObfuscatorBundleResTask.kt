@@ -2,7 +2,6 @@ package com.kotlin
 
 import com.android.aapt.Resources
 import com.android.builder.packaging.JarFlinger
-import com.android.tools.build.bundletool.model.utils.ResourcesUtils
 import com.kotlin.model.ActivityGuardExtension
 import com.kotlin.model.ClassInfo
 import com.kotlin.util.ObfuscatorUtil
@@ -27,7 +26,7 @@ import kotlin.io.path.Path
  * Created by DengLongFei
  * 2024/11/18
  */
-abstract class ResourcesObfuscatorTask : DefaultTask() {
+abstract class ObfuscatorBundleResTask : DefaultTask() {
 
 
     @get:InputFile

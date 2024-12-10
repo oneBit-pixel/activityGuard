@@ -27,7 +27,7 @@ import java.util.jar.JarEntry
 import java.util.jar.JarFile
 import java.util.jar.JarOutputStream
 
-abstract class TransformClassTask : DefaultTask() {
+abstract class ObfuscatorClassTask : DefaultTask() {
     @get:InputFiles
     abstract val allJars: ListProperty<RegularFile>
 
