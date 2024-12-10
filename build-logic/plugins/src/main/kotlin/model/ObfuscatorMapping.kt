@@ -73,14 +73,15 @@ class ObfuscatorMapping(
             handle.tag,
             obfuscatorName(handle.owner),
             handle.name,
-            obfuscatorDescriptor(handle.desc)
+            obfuscatorDescriptor(handle.desc),
+            handle.isInterface
         )
     }
 
     /**
      *混淆ConstantDynamic
      */
-    fun obfuscatorConstantDynamic(value:ConstantDynamic) {
+    private fun obfuscatorConstantDynamic(value:ConstantDynamic) {
         val list = arrayListOf<Any?>()
         repeat(value.bootstrapMethodArgumentCount) { index ->
             val it = value.getBootstrapMethodArgument(index)

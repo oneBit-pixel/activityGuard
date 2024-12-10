@@ -129,7 +129,6 @@ abstract class ObfuscatorBundleResTask : DefaultTask() {
         //修改并保存 AndroidManifest.xml
         val manifest = "AndroidManifest.xml"
         val xmlNode = Resources.XmlNode.parseFrom(readByte(bundleZip, manifest))
-        //val newXmlNode = changeManifestActivityName(xmlNode, classMapping)
         var newXmlNode = xmlNode
         mapOf(
             "activity" to "name",

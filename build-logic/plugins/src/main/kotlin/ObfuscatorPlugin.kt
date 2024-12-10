@@ -25,24 +25,8 @@ import java.io.File
  */
 class ObfuscatorPlugin : Plugin<Project> {
     override fun apply(project: Project) {
-
-
         project.extensions.create("actGuard", ActivityGuardExtension::class.java)
-
         project.plugins.withType(AppPlugin::class.java) {
-
-            ObfuscatorMapping(
-                mapOf(
-                    "com/google/android/exoplayer2/upstream/DataSpec" to "com/google/android/exoplayer2/upstream/aa"
-                )
-            ).also { obfuscatorMapping ->
-                val sss1 =
-                    obfuscatorMapping.obfuscatorDescriptor("(Lcom/google/android/exoplayer2/upstream/DataSpec;)Ljava/lang/String;")
-                println("-----------sss1 " + sss1)
-
-            }
-
-
             val androidComponents =
                 project.extensions.getByType(ApplicationAndroidComponentsExtension::class.java)
             androidComponents.onVariants { variant ->
