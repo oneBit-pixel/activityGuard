@@ -49,8 +49,8 @@ abstract class ObfuscatorClassTask : DefaultTask() {
     @TaskAction
     fun taskAction() {
         println("----------" + output.get().asFile.absolutePath)
-        logFileUtil?.closLog()
-        logFileUtil = LogFileUtil(logFile.get().asFile.outputStream())
+//        logFileUtil?.closLog()
+//        logFileUtil = LogFileUtil(logFile.get().asFile.outputStream())
         val jarOutputStream = JarOutputStream(
             BufferedOutputStream(
                 FileOutputStream(
@@ -68,16 +68,13 @@ abstract class ObfuscatorClassTask : DefaultTask() {
             processDirectoryWithASM(dir.asFile, jarOutputStream)
         }
         jarOutputStream.close()
-        logFileUtil?.closLog()
-
+//        logFileUtil?.closLog()
 
 
     }
 
     private fun JarOutputStream.writeEntity(name: String, inputStream: InputStream) {
-        if (jarPaths.contains(name)) {
-            //printDuplicatedMessage(name)
-        } else {
+        if (!jarPaths.contains(name)) {
             putNextEntry(JarEntry(name))
             inputStream.copyTo(this)
             closeEntry()
@@ -86,19 +83,13 @@ abstract class ObfuscatorClassTask : DefaultTask() {
     }
 
     private fun JarOutputStream.writeEntity(relativePath: String, byteArray: ByteArray) {
-        if (jarPaths.contains(relativePath)) {
-            // printDuplicatedMessage(relativePath)
-        } else {
+        if (!jarPaths.contains(relativePath)) {
             putNextEntry(JarEntry(relativePath))
             write(byteArray)
             closeEntry()
             jarPaths.add(relativePath)
         }
     }
-
-    private fun printDuplicatedMessage(name: String) =
-        println("Cannot add ${name}, because output Jar already has file with the same name.")
-
 
     /**
      * 处理jar
@@ -118,11 +109,14 @@ abstract class ObfuscatorClassTask : DefaultTask() {
                         ObfuscatorMapping(classMapping.get())
                     )
                     classReader.accept(classVisitor, ClassReader.EXPAND_FRAMES)
-                    jarOutput.writeEntity( jarEntry.name  , classWriter.toByteArray())
+                    jarOutput.writeEntity(jarEntry.name, classWriter.toByteArray())
                 }
             } else {
                 // 非类文件直接复制
-                jarOutput.writeEntity(jarEntry.name, jarFile.getInputStream(jarEntry))
+                jarFile.getInputStream(jarEntry).use { inputStream ->
+                    jarOutput.writeEntity(jarEntry.name, inputStream)
+                }
+
             }
         }
         jarFile.close()
@@ -150,10 +144,12 @@ abstract class ObfuscatorClassTask : DefaultTask() {
                     )
                 }
             } else if (file.isFile) {
-                jarOutput.writeEntity(
-                    file.relativeTo(inputDir).path,
-                    file.inputStream()
-                )
+                file.inputStream().use { inputStream ->
+                    jarOutput.writeEntity(
+                        file.relativeTo(inputDir).path,
+                        inputStream
+                    )
+                }
             }
         }
     }

@@ -19,14 +19,14 @@ actGuard {
 
 android {
 
-//    splits {
-//        density {
-//            this.isEnable =true
-//            reset()
-//            include("hdpi", "xhdpi")
-//
-//        }
-//    }
+    splits {
+        density {
+            this.isEnable = true
+            reset()
+            include("hdpi", "xhdpi")
+
+        }
+    }
 
     signingConfigs {
         create("release") {
@@ -55,7 +55,7 @@ android {
 
     buildTypes {
         release {
-            isShrinkResources = true
+            isShrinkResources = false
             isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -85,7 +85,6 @@ android {
         }
 
 
-
     }
 
     compileOptions {
@@ -110,6 +109,7 @@ android {
 }
 
 dependencies {
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -132,5 +132,5 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
 
-    implementation( project(":model1"))
+    implementation(project(":model1"))
 }

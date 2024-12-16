@@ -24,7 +24,6 @@ class LogFileUtil(private val outputStream: FileOutputStream) {
     fun sendLog(log: String) {
         outputStream.write(log.toByteArray())
         outputStream.write("\n".toByteArray())
-        //channel.trySend(log)
     }
 
     fun closLog(){

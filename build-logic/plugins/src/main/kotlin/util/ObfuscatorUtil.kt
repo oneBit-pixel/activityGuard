@@ -1,48 +1,71 @@
 package com.kotlin.util
 
+import com.kotlin.model.ClassInfo
+
 /**
  * Created by DengLongFei
- * 2024/11/27
+ * 2024/12/16
  */
-object ObfuscatorUtil {
-    private val usedNames = mutableMapOf<String, String>() // 原始段 -> 混淆段的映射
-    private val allGeneratedNames = mutableSetOf<String>()
-    private val letters = ('a'..'z')+ ('A'..'Z') // 仅字母字符集
-    private val charset = letters + ('0'..'9') // 全字符集，首字母需限制为字母
+class ObfuscatorUtil {
+    private val alphabet = "abcdefghijklmnopqrstuvwxyz"
+    private val digitAlphabet = "abcdefghijklmnopqrstuvwxyz0123456789"
 
-    /**
-     * 生成随机类名
-     */
-    private fun generateRandomName(length: Int = 5): String {
-        while (true) {
-            val className = buildString {
-                append(letters.random())
-                repeat(length - 1) { append(charset.random()) }
-            }
-            // 确保生成的类名唯一
-            if (allGeneratedNames.add(className)) {
-                return className
-            }
+    //保存混淆后的目录名和当前目录下的混淆类名
+    private val generatedClasses = mutableMapOf<String, MutableSet<String>>()
+
+    fun initMap(
+        classMapping: LinkedHashMap<String, ClassInfo>,
+        dirMapping: LinkedHashMap<String, String>
+    ) {
+        dirMapping.forEach {
+            generatedClasses.getOrPut(it.value) { mutableSetOf() }
+        }
+        classMapping.forEach {
+            val (obfuscatorDir, obfuscatorName) = getClassDirAndName(it.value.obfuscatorClassName)
+            generatedClasses.getOrPut(obfuscatorDir) { mutableSetOf() }.add(obfuscatorName)
         }
     }
-
 
     /**
      * 获取混淆目录
      */
-    fun getObfuscatedClassDir(originalPath: String, length: Int = 4): String {
-        val obfuscatedSegments = originalPath.split(".").map { item ->
-            usedNames.getOrPut(item) { generateRandomName(length) }
+    fun getObfuscatedClassDir(): String {
+        val count = generatedClasses.size
+        return generateName(count, minLength = 2, charset = alphabet).also {
+            generatedClasses.getOrPut(it) { mutableSetOf() }
         }
-        return obfuscatedSegments.joinToString(".")
     }
-
 
     /**
      * 获取混淆名称
      */
-    fun getObfuscatedClassName(length: Int = 4): String {
-        return generateRandomName(length)
+    fun getObfuscatedClassName(dir: String): String {
+        val classList = generatedClasses.getOrPut(dir) { mutableSetOf() }
+        return generateName(classList.size, minLength = 1, charset = digitAlphabet).also {
+            generatedClasses.getOrPut(dir) { mutableSetOf() }.add(it)
+        }
+    }
+
+    private fun generateName(counter: Int, minLength: Int, charset: String): String {
+        val sb = StringBuilder()
+        var value = counter
+        if (value < (minLength - 1) * charset.length) {
+            value += minLength * charset.length
+        }
+        //首为字母
+        val firstCharIndex = value % alphabet.length
+        sb.append(alphabet[firstCharIndex])
+        value /= alphabet.length
+
+        while (value > 0){
+            val charIndex = value % charset.length
+            sb.append(charset[charIndex])
+            value /= charset.length
+        }
+        return sb.toString()
     }
 
 }
+
+
+

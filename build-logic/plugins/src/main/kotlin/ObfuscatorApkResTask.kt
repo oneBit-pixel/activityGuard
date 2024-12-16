@@ -30,6 +30,7 @@ import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
+import org.gradle.internal.impldep.org.apache.commons.io.FileUtils
 import org.gradle.workers.WorkAction
 import org.gradle.workers.WorkParameters
 import java.io.File
@@ -66,8 +67,10 @@ abstract class ObfuscatorApkTask : BaseTask() {
 
     @TaskAction
     fun taskAction() {
-        println("activityGuard:ObfuscatorApkTask----" + inputProcessedRes.get().asFile.absolutePath)
-        println("activityGuard:ObfuscatorApkTask----outputProcessedRes" + outputProcessedRes.get().asFile.absolutePath)
+        println(
+            "activityGuard:ObfuscatorApkTask----" + inputProcessedRes.get().asFile.absolutePath +
+                    " \nout " + outputProcessedRes.get().asFile.absolutePath
+        )
         transformationRequest.get().submit(
             this,
             workerExecutor.noIsolation(),
@@ -97,6 +100,8 @@ abstract class WorkItem @Inject constructor() :
     WorkAction<WorkItemParameters> {
     private val logger = Logging.getLogger(ObfuscatorApkTask::class.java)
     override fun execute() {
+
+
         parameters.outputApkFile.get().asFile.delete()
         parameters.inputApkFile.asFile.get().copyTo(
             parameters.outputApkFile.get().asFile
@@ -142,28 +147,26 @@ abstract class WorkItem @Inject constructor() :
         inputFile: File,
         classMapping: Map<String, ClassInfo>
     ) {
-        val dirName = inputFile.parentFile.absolutePath+"/bundleRes"+inputFile.name
-        File(dirName).also {
-            if (it.exists()) {
-                it.delete()
-            }
-        }
+        val dirName = inputFile.parentFile.absolutePath + "/bundleRes" + inputFile.name
+        FileUtils.deleteDirectory(File(dirName))
         val bundleZip = ZipFile(inputFile)
         bundleZip.entries().asSequence().forEach { zipEntry ->
             val path = zipEntry.name
             when {
-                path =="resources.pb" -> {
+                path == "resources.pb" -> {
                     val resourceTableByte = readByte(bundleZip, path)
                     createDirAndFile(dirName, path).outputStream().use { out ->
                         out.write(resourceTableByte)
                     }
                 }
+
                 path.startsWith("res/layout") -> {
                     val xmlNode = changeLayoutXmlName(bundleZip, path.toString(), classMapping)
                     createDirAndFile(dirName, path.toString()).outputStream()
                         .use { xmlNode.writeTo(it) }
                 }
-                path=="AndroidManifest.xml"->{
+
+                path == "AndroidManifest.xml" -> {
                     val xmlNode = Resources.XmlNode.parseFrom(readByte(bundleZip, path))
                     var newXmlNode = xmlNode
                     mapOf(
@@ -172,11 +175,13 @@ abstract class WorkItem @Inject constructor() :
                         "application" to "name",
                         "provider" to "name",
                     ).forEach {
-                        newXmlNode = changeXmlNodeAttribute(newXmlNode, it.key, it.value, classMapping)
+                        newXmlNode =
+                            changeXmlNodeAttribute(newXmlNode, it.key, it.value, classMapping)
                     }
                     createDirAndFile(dirName, path).outputStream()
                         .use { newXmlNode.writeTo(it) }
                 }
+
                 else -> {
                     createDirAndFile(dirName, path.toString()).outputStream().use { out ->
                         out.write(readByte(bundleZip, path.toString()))

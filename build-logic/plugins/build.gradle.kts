@@ -26,6 +26,7 @@ dependencies {
     compileOnly("com.android.tools.build:bundletool:1.14.0")
     compileOnly("com.android.tools.build:gradle:8.1.4")
     implementation("com.android.tools:common:31.6.0")
+    implementation("com.android.tools:sdk-common:31.1.4")
 
 
 }

@@ -44,6 +44,9 @@ class ObfuscatorMapping(
     fun obfuscatorDescriptor(name: String?): String? {
         return obfuscatorDescriptorOrName(name)
     }
+
+
+
     /**
      * 混淆类型类型签名
      * Landroid/widget/ArrayAdapter<Ljava/lang/CharSequence;>;
@@ -54,7 +57,7 @@ class ObfuscatorMapping(
      * Landroidx/compose/animation/core/Animatable<Landroidx/compose/ui/geometry/Offset;Landroidx/compose/animation/core/AnimationVector2D;>;
      */
     fun obfuscatorSignature(signature: String?): String? {
-        return signature
+      return  obfuscatorDescriptorOrName(signature)
     }
 
     /**
@@ -68,7 +71,7 @@ class ObfuscatorMapping(
      *混淆Handle
      */
     fun obfuscatorHandle(handle: Handle?): Handle? {
-        handle?:return null
+        handle ?: return null
         return Handle(
             handle.tag,
             obfuscatorName(handle.owner),
@@ -81,7 +84,7 @@ class ObfuscatorMapping(
     /**
      *混淆ConstantDynamic
      */
-    private fun obfuscatorConstantDynamic(value:ConstantDynamic) {
+    private fun obfuscatorConstantDynamic(value: ConstantDynamic) {
         val list = arrayListOf<Any?>()
         repeat(value.bootstrapMethodArgumentCount) { index ->
             val it = value.getBootstrapMethodArgument(index)
@@ -99,7 +102,7 @@ class ObfuscatorMapping(
     }
 
 
-     fun obfuscatorBootstrapMethodArgumentsItem(it: Any?): Any? {
+    fun obfuscatorBootstrapMethodArgumentsItem(it: Any?): Any? {
         return when (it) {
             is Type -> {
                 obfuscatorType(it)
@@ -108,9 +111,11 @@ class ObfuscatorMapping(
             is Handle -> {
                 obfuscatorHandle(it)
             }
-            is ConstantDynamic->{
+
+            is ConstantDynamic -> {
                 obfuscatorConstantDynamic(it)
             }
+
             else -> it
         }
     }
@@ -139,12 +144,12 @@ class ObfuscatorMapping(
     private fun String?.toObfuscatorDescriptor(): String? {
         val descriptor = this
         descriptor ?: return null
-//        val regex = Regex("L([a-zA-Z0-9&_/]+);")
-        val regex = Regex("L([^;]+);")
+        val regex = Regex("L([a-zA-Z0-9_/]+/)([a-zA-Z0-9_$]+)")
         return regex.replace(descriptor) { matchResult ->
-            val originalClass = matchResult.groupValues[1]
-            val replacedClass = originalClass.toObfuscatorName()
-            "L$replacedClass;" // 返回替换后的类描述符
+            val path = matchResult.groups[1]?.value // 捕获路径部分
+            val className = matchResult.groups[2]?.value // 捕获类名部分
+            val replacedClass = (path+className).toObfuscatorName()
+            "L$replacedClass" // 返回替换后的类描述符
         }
     }
 
@@ -155,7 +160,7 @@ class ObfuscatorMapping(
     @Synchronized
     fun obfuscatorDescriptorOrName(name: String?): String? {
         name ?: return null
-        return if (name.startsWith("L") || name.startsWith("(") || name.startsWith("[")) {
+        return if (name.startsWith("L") || name.startsWith("(") || name.startsWith("[") ||name.startsWith("<")) {
             name.toObfuscatorDescriptor()
         } else {
             name.toObfuscatorName()

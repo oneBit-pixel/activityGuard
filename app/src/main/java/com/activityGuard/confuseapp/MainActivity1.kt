@@ -1,5 +1,6 @@
 package com.activityGuard.confuseapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +11,7 @@ import com.activityGuard.model.UserModel1
 import com.activityGuard.model.UserModel2
 import com.activityGuard.model.UserModel3
 import com.activityGuard.view.PlayView
+import com.ndk.model1.ModelActivity1
 
 class MainActivity1 : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,9 +28,14 @@ class MainActivity1 : AppCompatActivity() {
 
         val playView = findViewById<PlayView>(R.id.playView)
         playView.setColor("9999")
-        println("view -----3 " + playView.toString())
+        println("view -----3 " + playView.toString() +TestClass())
         changePlayView(playView)
         changePlayView2(playView,"aaaaa")
+
+        playView.setOnClickListener {
+            startActivity(Intent(this, ModelActivity1::class.java))
+        }
+
     }
 
     fun changePlayView(playView:PlayView){

@@ -1,6 +1,7 @@
 package com.kotlin.asm
 
 import com.kotlin.model.ObfuscatorMapping
+import com.kotlin.util.isDebug
 import com.kotlin.util.logDebug
 import com.kotlin.util.toJson
 import org.objectweb.asm.AnnotationVisitor

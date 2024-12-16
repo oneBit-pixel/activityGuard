@@ -5,13 +5,10 @@ import com.android.build.api.artifact.impl.ArtifactsImpl
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.android.build.api.variant.ScopedArtifacts
 import com.android.build.gradle.AppPlugin
-import com.android.build.gradle.internal.res.Aapt2FromMaven.Companion.create
 import com.android.build.gradle.internal.scope.InternalArtifactType
-import com.android.build.gradle.internal.services.getBuildService
-import com.android.build.gradle.internal.utils.setDisallowChanges
 import com.kotlin.model.ActivityGuardExtension
-import com.kotlin.model.ObfuscatorMapping
-import com.kotlin.util.createDirAndFile
+import com.kotlin.util.buildAapt2Input
+import com.kotlin.util.getClassDirAndName
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.configurationcache.extensions.capitalized
@@ -30,9 +27,15 @@ class ObfuscatorPlugin : Plugin<Project> {
             val androidComponents =
                 project.extensions.getByType(ApplicationAndroidComponentsExtension::class.java)
             androidComponents.onVariants { variant ->
+
+                val actGuard = project.extensions.getByType(ActivityGuardExtension::class.java)
+                    ?: ActivityGuardExtension()
+                if (!actGuard.isEnable) {
+                    return@onVariants
+                }
                 val artifacts = variant.artifacts as? ArtifactsImpl ?: return@onVariants
-                if (!variant.isMinifyEnabled || !variant.shrinkResources) {
-                    println("activityGuard:Not executed, please open isMinifyEnabled shrinkResources")
+                if (!variant.isMinifyEnabled) {
+                    println("activityGuard:Not executed, please open isMinifyEnabled ")
                     return@onVariants
                 }
 
@@ -42,9 +45,14 @@ class ObfuscatorPlugin : Plugin<Project> {
                 val taskBundleProvider =
                     project.tasks.register<ObfuscatorBundleResTask>(taskBundleName)
                 taskBundleProvider.configure {
+                    buildAapt2Input(project, it.aapt2)
                     it.bundleResFiles.set(artifacts.get(InternalArtifactType.LINKED_RES_FOR_BUNDLE))
                     it.aaptProguardFile.set(artifacts.get(InternalArtifactType.AAPT_PROGUARD_FILE))
-                    it.outputFile.set(project.layout.buildDirectory.file("intermediates/${taskBundleName}/mapping.txt"))
+                    it.outputFile.set(
+                        project.layout.buildDirectory.file(
+                            "intermediates/activityGuardBundleResTask/${taskBundleName}/mapping.txt"
+                        )
+                    )
                 }
 
                 //混淆apk资源
@@ -57,28 +65,18 @@ class ObfuscatorPlugin : Plugin<Project> {
                     )
                     .toTransformMany(InternalArtifactType.PROCESSED_RES)
                 taskApkProvider.configure {
-                    it.aapt2.let { aapt2Input ->
-                        aapt2Input.buildService.setDisallowChanges(
-                            getBuildService(project.gradle.sharedServices)
+                    buildAapt2Input(project, it.aapt2)
+                    it.temDirectory.set(
+                        project.layout.buildDirectory.dir(
+                            "intermediates/activityGuardApkResTask/${variant.name.capitalized()}/${taskApkName}"
                         )
-                        aapt2Input.threadPoolBuildService.setDisallowChanges(
-                            getBuildService(project.gradle.sharedServices)
-                        )
-                        val aapt2Bin =
-                            create(project) { option -> System.getenv(option.propertyName) }
-                        aapt2Input.binaryDirectory.setFrom(aapt2Bin.aapt2Directory)
-                        aapt2Input.version.setDisallowChanges(aapt2Bin.version)
-                        aapt2Input.maxWorkerCount.setDisallowChanges(
-                            project.gradle.startParameter.maxWorkerCount
-                        )
-                    }
-                    it.temDirectory.set(project.layout.buildDirectory.dir("intermediates/${taskApkName}"))
+                    )
                     it.transformationRequest.set(transformationRequest)
                     it.classMapping.set(
                         taskBundleProvider.flatMap { task ->
                             task.outputFile.map { out ->
                                 val file = out.asFile
-                                fileToClassMappingMap(file,false)
+                                fileToClassMappingMap(file, false)
                             }
                         })
                 }
@@ -95,9 +93,8 @@ class ObfuscatorPlugin : Plugin<Project> {
                     )
                 transformClassTask.configure { params ->
                     params.logFile.set(
-                        createDirAndFile(
-                            project.layout.buildDirectory.get().asFile.absolutePath,
-                            "intermediates/${taskBundleName}/transformLog.txt"
+                        project.layout.buildDirectory.file(
+                            "intermediates/activityGuardBundleResTask/${taskBundleName}/transformLog.txt"
                         )
                     )
                     params.classMapping.set(
@@ -109,10 +106,21 @@ class ObfuscatorPlugin : Plugin<Project> {
                         })
                 }
 
-
+//                //资源优化
+//                val optimizeBundleTask =
+//                    project.tasks.register<OptimizeBundleTask>("activityGuard${variant.name}optimizeBundleTask")
+//                variant.artifacts.use(optimizeBundleTask).wiredWithFiles(
+//                    OptimizeBundleTask::inputBundle,
+//                    OptimizeBundleTask::outputBundle,
+//                    ).toTransform(SingleArtifact.BUNDLE)
+//                optimizeBundleTask.configure {
+//                    buildAapt2Input(project,it.aapt2)
+//                }
             }
         }
+
     }
+
 
     /**
      * 读取混淆后规则为map
@@ -136,6 +144,16 @@ class ObfuscatorPlugin : Plugin<Project> {
                     hashMap[original] = obfuscated
                     //兼容butterKnife
                     hashMap[original + "_ViewBinding"] = obfuscated + "_ViewBinding"
+                    //兼容hit
+                    val split = if (isReplace) "/" else "."
+                    val (dir, name) = getClassDirAndName(original, split)
+                    val (obfuscatedDir, obfuscatedName) = getClassDirAndName(obfuscated, split)
+                    if (dir.isNotEmpty()) {
+                        hashMap[dir + split + "Hilt_" + name] =
+                            obfuscatedDir + split + "Hilt_" + obfuscatedName
+                    } else {
+                        hashMap["Hilt_$name"] = "Hilt_$obfuscatedName"
+                    }
                 }
             }
         }
