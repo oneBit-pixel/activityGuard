@@ -8,6 +8,7 @@ import com.android.build.gradle.AppPlugin
 import com.android.build.gradle.internal.scope.InternalArtifactType
 import com.kotlin.model.ActivityGuardExtension
 import com.kotlin.util.buildAapt2Input
+import com.kotlin.util.createDirAndFile
 import com.kotlin.util.getClassDirAndName
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -92,11 +93,12 @@ class ObfuscatorPlugin : Plugin<Project> {
                         ObfuscatorClassTask::output
                     )
                 transformClassTask.configure { params ->
-                    params.logFile.set(
-                        project.layout.buildDirectory.file(
-                            "intermediates/activityGuardBundleResTask/${taskBundleName}/transformLog.txt"
-                        )
-                    )
+//                    params.logFile.set(
+//                        createDirAndFile(
+//                            project.layout.buildDirectory.get().asFile.absolutePath,
+//                            "intermediates/activityGuardBundleResTask/${taskBundleName}/transformLog.txt"
+//                        )
+//                    )
                     params.classMapping.set(
                         taskBundleProvider.flatMap {
                             it.outputFile.map { out ->

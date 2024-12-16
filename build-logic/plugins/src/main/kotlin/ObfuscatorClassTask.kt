@@ -43,8 +43,8 @@ abstract class ObfuscatorClassTask : DefaultTask() {
     @get:Input
     abstract val classMapping: MapProperty<String, String>
 
-    @get:InputFile
-    abstract val logFile: RegularFileProperty
+//    @get:InputFile
+//    abstract val logFile: RegularFileProperty
 
     @TaskAction
     fun taskAction() {
