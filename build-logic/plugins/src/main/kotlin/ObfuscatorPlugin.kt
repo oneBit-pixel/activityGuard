@@ -8,7 +8,6 @@ import com.android.build.gradle.AppPlugin
 import com.android.build.gradle.internal.scope.InternalArtifactType
 import com.kotlin.model.ActivityGuardExtension
 import com.kotlin.util.buildAapt2Input
-import com.kotlin.util.createDirAndFile
 import com.kotlin.util.getClassDirAndName
 import org.gradle.api.Plugin
 import org.gradle.api.Project

@@ -35,18 +35,19 @@ dependencies {
 gradlePlugin {
     plugins {
         create("actGuardPlugin") {
-            id = "com.obfuscator.activityGuard"
+            id = "activityGuard"
             implementationClass = "com.kotlin.ObfuscatorPlugin"
         }
     }
 }
 
 
+
 publishing {
     publications {
         create<MavenPublication>("publishToMavenLocal") {
             from(components["java"])
-            groupId = "com.obfuscator"
+            groupId = "com.github.denglongfei"
             artifactId = "activityGuard"
             version = "1.0.0"
         }
@@ -54,27 +55,6 @@ publishing {
             mavenLocal()
         }
     }
-
-
-//    publications {
-//        create<MavenPublication>("publishToMavenService") {
-//            from(components["java"])
-//            groupId = "com.obfuscator.activityGuard"
-//            artifactId = "activityGuard"
-//            version = "1.0.0"
-//        }
-//
-//        repositories {
-//            maven {
-//                isAllowInsecureProtocol = true
-//                url = uri("http://192.168.3.241:8081/repository/maven-releases/")
-//                credentials {
-//                    username = "admin"
-//                    password = "Bnic2SLEf"
-//                }
-//            }
-//        }
-//    }
 
 
 }

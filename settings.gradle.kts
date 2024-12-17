@@ -24,8 +24,6 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        google()
-        mavenCentral()
         maven { url= URI("https://maven.aliyun.com/repository/google") }
         maven {
             url  = URI("https://maven.aliyun.com/repository/public/")
