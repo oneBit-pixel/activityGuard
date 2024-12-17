@@ -1,16 +1,12 @@
 plugins {
-    java
     `java-gradle-plugin`
     `maven-publish`
     kotlin("jvm") version "1.9.0"
 }
 
-//apply(from = rootProject.file("plugins/maven.gradle"))
-
 repositories {
     mavenCentral()
     google()
-    maven("https://jitpack.io")
 }
 
 dependencies {
@@ -27,8 +23,6 @@ dependencies {
     compileOnly("com.android.tools.build:gradle:8.1.4")
     implementation("com.android.tools:common:31.6.0")
     implementation("com.android.tools:sdk-common:31.1.4")
-
-
 }
 
 

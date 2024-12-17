@@ -24,6 +24,7 @@ pluginManagement {
         google()
         mavenCentral()
         mavenLocal()
+        maven { url = uri("https://jitpack.io") }
     }
 }
 
@@ -33,7 +34,9 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         mavenLocal()
+        maven { url = uri("https://jitpack.io") }
     }
+
 }
 
 include(":plugins")
