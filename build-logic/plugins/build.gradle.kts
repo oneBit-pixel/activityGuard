@@ -2,9 +2,9 @@ plugins {
     `java-gradle-plugin`
     `maven-publish`
     kotlin("jvm") version "1.9.0"
-
 }
 
+apply(from = rootProject.file("plugins/publish.gradle"))
 
 
 
@@ -34,38 +34,36 @@ dependencies {
 }
 
 
-gradlePlugin {
-    plugins {
-        create("actGuardPlugin") {
-            id = "activityGuard"
-            implementationClass = "com.kotlin.ObfuscatorPlugin"
-        }
-    }
-}
-
-group = "com.github.denglongfei"
-description = "activityGuard"
-version = "1.0.0"
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-}
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            from(components["java"])
-            groupId = "com.github.denglongfei"
-            artifactId = "activityGuard"
-            version = "1.0.0"
-        }
-        repositories {
-            mavenLocal()
-        }
-    }
-
-
-}
+//gradlePlugin {
+//    plugins {
+//        create("actGuardPlugin") {
+//            id = "activityGuard"
+//            implementationClass = "com.kotlin.ObfuscatorPlugin"
+//        }
+//    }
+//}
+//
+//group = "com.github.denglongfei"
+//description = "activityGuard"
+//version = "1.0.0"
+//
+//java {
+//    sourceCompatibility = JavaVersion.VERSION_17
+//    targetCompatibility = JavaVersion.VERSION_17
+//}
+//publishing {
+//    publications {
+//        create<MavenPublication>("maven") {
+//            from(components["java"])
+//            groupId = "com.github.denglongfei"
+//            artifactId = "activityGuard"
+//            version = "1.0.0"
+//        }
+//        repositories {
+//            mavenLocal()
+//        }
+//    }
+//}
 
 
 

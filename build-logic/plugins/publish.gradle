@@ -1,0 +1,35 @@
+apply plugin: 'kotlin'
+apply plugin: 'java-gradle-plugin'
+apply plugin: 'maven-publish'
+
+
+gradlePlugin {
+    plugins {
+        activityGuard {
+            id = 'activityGuard'
+            implementationClass = 'com.kotlin.ObfuscatorPlugin'
+        }
+
+    }
+}
+
+group = 'com.github.denglongfei'
+description = 'activityGuard'
+version = '1.0.0'
+
+sourceCompatibility = JavaVersion.VERSION_11
+publishing {
+    publications {
+        maven(MavenPublication) {
+            artifactId = 'activityGuard'
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            url = uri('../repo')
+        }
+    }
+}
+
+
