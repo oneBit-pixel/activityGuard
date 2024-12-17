@@ -41,11 +41,13 @@ gradlePlugin {
     }
 }
 
-
+group = "com.github.denglongfei"
+description = "activityGuard"
+version = "1.0.0"
 
 publishing {
     publications {
-        create<MavenPublication>("publishToMavenLocal") {
+        create<MavenPublication>("maven") {
             from(components["java"])
             groupId = "com.github.denglongfei"
             artifactId = "activityGuard"

@@ -1,3 +1,5 @@
+import java.net.URI
+
 /*
  * Copyright 2022 The Android Open Source Project
  *
@@ -18,21 +20,21 @@ rootProject.name = "build-logic"
 
 pluginManagement {
     repositories {
-    maven { url = uri("") }
         gradlePluginPortal()
         google()
         mavenCentral()
         mavenLocal()
+        maven { url = uri("https://jitpack.io") }
     }
 }
 
 
 dependencyResolutionManagement {
     repositories {
-    maven { url = uri("") }
         google()
         mavenCentral()
         mavenLocal()
+        maven { url = uri("https://jitpack.io") }
     }
 }
 

@@ -2,9 +2,6 @@ dir mapping:
 com.activityGuard.confuseapp -》 ac
 com.ndk.model1 -》 bc
 com.activityGuard.view -》 cc
-ac -》 dc
-bc -》 ec
-cc -》 fc
 
 
 

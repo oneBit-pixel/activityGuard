@@ -133,4 +133,5 @@ dependencies {
 
 
     implementation(project(":model1"))
+   // implementation("com.github.denglongfei:activityGuard:1.0.0")
 }
