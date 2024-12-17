@@ -1,9 +1,4 @@
-import java.net.URI
-
 include(":model1")
-
-
-
 
 pluginManagement {
     includeBuild("build-logic")
@@ -24,14 +19,15 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        maven { url= uri("https://maven.aliyun.com/repository/google") }
+        maven { url = uri("https://maven.aliyun.com/repository/google") }
         maven {
-            url  = uri("https://maven.aliyun.com/repository/public/")
+            url = uri("https://maven.aliyun.com/repository/public/")
         }
         mavenCentral()
         google()
-        maven { url= uri( "https://maven.google.com") }
-        maven { url= uri( "https://jitpack.io") }
+        maven { url = uri("https://maven.google.com") }
+        maven { url = uri("https://jitpack.io") }
+
     }
 }
 

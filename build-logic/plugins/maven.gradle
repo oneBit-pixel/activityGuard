@@ -1,37 +1,37 @@
-apply plugin: 'kotlin'
-apply plugin: 'java-gradle-plugin'
-apply plugin: 'maven-publish'
-
-
-gradlePlugin {
-    plugins {
-        actGuardPlugin {
-            id = 'activityGuard'
-            implementationClass = 'com.kotlin.ObfuscatorPlugin'
-        }
-    }
-}
-
-group = 'com.github.denglongfei'
-description = 'activityGuard'
-version = '1.0.0'
-
-sourceCompatibility = JavaVersion.VERSION_17
-publishing {
-    publications {
-        maven(MavenPublication) {
-            //插件名称
-            artifactId = 'activityGuard'
-            from components.java
-        }
-    }
-    //插件存储库
-    repositories {
-        maven {
-            // 生成的插件位置
-            url = uri('../repo')
-        }
-    }
-}
-
-
+//apply plugin: 'kotlin'
+//apply plugin: 'java-gradle-plugin'
+//apply plugin: 'maven-publish'
+//
+//
+//gradlePlugin {
+//    plugins {
+//        actGuardPlugin {
+//            id = 'activityGuard'
+//            implementationClass = 'com.kotlin.ObfuscatorPlugin'
+//        }
+//    }
+//}
+//
+//group = 'com.github.denglongfei'
+//description = 'activityGuard'
+//version = '1.0.0'
+//
+//sourceCompatibility = JavaVersion.VERSION_17
+//publishing {
+//    publications {
+//        maven(MavenPublication) {
+//            //插件名称
+//            artifactId = 'activityGuard'
+//            from components.java
+//        }
+//    }
+//    //插件存储库
+//    repositories {
+//        maven {
+//            // 生成的插件位置
+//            url = uri('../repo')
+//        }
+//    }
+//}
+//
+//
