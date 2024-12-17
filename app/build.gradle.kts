@@ -1,21 +1,21 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("activityGuard")
+//    id("activityGuard")
 }
 
-actGuard {
-
-//    obfuscatorClassFunction={
-//        println("--------obfuscatorClassFunction "+it)
-//        it
-//    }
-
-//    whiteList = hashSetOf(
-//        "com.activityGuard.confuseapp.MainActivity1",
-//        "*.MainActivity2",
-//    )
-}
+//actGuard {
+//
+////    obfuscatorClassFunction={
+////        println("--------obfuscatorClassFunction "+it)
+////        it
+////    }
+//
+////    whiteList = hashSetOf(
+////        "com.activityGuard.confuseapp.MainActivity1",
+////        "*.MainActivity2",
+////    )
+//}
 
 android {
 

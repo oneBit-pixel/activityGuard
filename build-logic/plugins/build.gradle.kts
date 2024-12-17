@@ -2,6 +2,7 @@ plugins {
     `java-gradle-plugin`
     `maven-publish`
     kotlin("jvm") version "1.9.0"
+    java
 }
 
 repositories {
@@ -25,39 +26,37 @@ dependencies {
     implementation("com.android.tools:sdk-common:31.1.4")
 }
 
+group = "com.github.denglongfei"
+version = "1.0.0"
 
-gradlePlugin {
-    plugins {
-        create("actGuardPlugin") {
-            id = "activityGuard"
-            group = "com.github.denglongfei"
-            description = "activityGuard"
-            version = "1.0.0"
-            implementationClass = "com.kotlin.ObfuscatorPlugin"
-        }
-    }
-}
+//gradlePlugin {
+//    plugins {
+//        create("actGuardPlugin") {
+//            id = "activityGuard"
+//            group = "com.github.denglongfei"
+//            description = "activityGuard"
+//            version = "1.0.0"
+//            implementationClass = "com.kotlin.ObfuscatorPlugin"
+//        }
+//    }
+//}
 
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
-    withSourcesJar()
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            create<MavenPublication>("publishToMavenLocal") {
-                from(components["java"])
-                groupId = "com.github.denglongfei"
-                artifactId = "activityGuard"
-                version = "1.0.0"
-            }
-            repositories {
-                mavenLocal()
-            }
+publishing {
+    publications {
+        register("release", MavenPublication::class) {
+            from(components["java"])
+            groupId = "com.github.denglongfei"
+            artifactId = "activityGuard"
+            version = "1.0.0"
+        }
+        repositories {
+            maven { url = uri("https://jitpack.io") }
         }
     }
 }
