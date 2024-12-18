@@ -149,7 +149,11 @@ abstract class WorkItem @Inject constructor() :
         classMapping: Map<String, ClassInfo>
     ) {
         val dirName = inputFile.parentFile.absolutePath + "/bundleRes" + inputFile.name
-        FileUtils.deleteDirectory(File(dirName))
+        File(dirName).also {
+            if(it.exists()){
+                it.delete()
+            }
+        }
         val bundleZip = ZipFile(inputFile)
         bundleZip.entries().asSequence().forEach { zipEntry ->
             val path = zipEntry.name

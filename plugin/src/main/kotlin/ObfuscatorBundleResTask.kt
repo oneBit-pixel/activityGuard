@@ -92,7 +92,11 @@ abstract class ObfuscatorBundleResTask : DefaultTask() {
      */
     private fun obfuscatorRes(outFile: File, classMapping: Map<String, ClassInfo>) {
         val dirName = outFile.parentFile.absolutePath + "/bundleRes"
-        FileUtils.deleteDirectory(File(dirName))
+        File(dirName).also {
+            if(it.exists()){
+                it.delete()
+            }
+        }
         val bundleZip = ZipFile(bundleResFiles.get().asFile)
         bundleZip.entries().asSequence().forEach { zipEntry ->
             val path = zipEntry.name
