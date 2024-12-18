@@ -1,5 +1,4 @@
 # activityGuard：Android Activity混淆
-
 **activityGuard** 是一种针对四大组件进行混淆的解决方案，能够在打包时对apk和aab中的Activity、Service、Application和自定义的view进行名称混淆以提升应用的安全性。
 
 ### 目的
@@ -11,6 +10,7 @@
 Android四大组件在打包过程中不能够R8被混淆，因为组件在AndroidManifest.xml以明文形式存在Android系统通过反射创建相关类来启动。所以我们需要在R8执行前修改AndroidManifest.xml和layout布局中的类名，并把新的名称keep的R8的混淆规则中（R8混淆执行时是以keep住的类为节点，如果没引用的类会被移除掉）。最后在通过asm字节码修改类名，就能够实现对四大组件和自定义view实现混淆名称了。
 activityGuard 通过自定义Gradle任务在打包过程中修改替换AndroidManifest.xml和layout中的类名和class的类名来实现对Android四大组件的混淆
 
+博客 地址[：](url)<https://juejin.cn/post/7449723991638327296>
 ### 使用方法
 
 ```
