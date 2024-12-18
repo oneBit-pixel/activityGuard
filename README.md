@@ -52,24 +52,24 @@ actGuard {
 #### AAB混淆
 
 aab打包混淆流程图如下
-
-![aab.png](https://p0-xtjj-private.juejin.cn/tos-cn-i-73owjymdk6/c1a1fe61d5f14041b7c0cb0fec53f101~tplv-73owjymdk6-jj-mark-v1:0:0:0:0:5o6Y6YeR5oqA5pyv56S-5Yy6IEAgZGVuZ2xvbmdmZWk=:q75.awebp?policy=eyJ2bSI6MywidWlkIjoiNDI2NTc2MDg0ODM1MjMxMSJ9&rk3s=f64ab15b&x-orig-authkey=f32326d3454f2ac7e96d3d06cdbb035152127018&x-orig-expires=1735147137&x-orig-sign=c0%2BxOSFu3r4aJsljYLv84HmJSco%3D)
+![aab](https://github.com/user-attachments/assets/b13c1c3c-afb5-4870-b32b-ee6293bb97c5)
 
 #### Apk混淆
 
 apk打包混淆流程图如下
 
-![apk.png](https://p0-xtjj-private.juejin.cn/tos-cn-i-73owjymdk6/7367818fc8244c52960b8c43f43a6966~tplv-73owjymdk6-jj-mark-v1:0:0:0:0:5o6Y6YeR5oqA5pyv56S-5Yy6IEAgZGVuZ2xvbmdmZWk=:q75.awebp?policy=eyJ2bSI6MywidWlkIjoiNDI2NTc2MDg0ODM1MjMxMSJ9&rk3s=f64ab15b&x-orig-authkey=f32326d3454f2ac7e96d3d06cdbb035152127018&x-orig-expires=1735147137&x-orig-sign=E8agZhXJaGECUKt%2BaXFpXWuF7AQ%3D)
+![apk](https://github.com/user-attachments/assets/86b16d1d-e0f1-45d7-9b12-ab2bcea33d06)
+
 ### 最终效果
 
 **apk**
-
-![image.png](https://p0-xtjj-private.juejin.cn/tos-cn-i-73owjymdk6/5890dbd94f9e4f7db9c6e34b9326c527~tplv-73owjymdk6-jj-mark-v1:0:0:0:0:5o6Y6YeR5oqA5pyv56S-5Yy6IEAgZGVuZ2xvbmdmZWk=:q75.awebp?policy=eyJ2bSI6MywidWlkIjoiNDI2NTc2MDg0ODM1MjMxMSJ9&rk3s=f64ab15b&x-orig-authkey=f32326d3454f2ac7e96d3d06cdbb035152127018&x-orig-expires=1735147137&x-orig-sign=YTvNDqkptX7xg3QSsMgExMa9ycQ%3D)
-![image.png](https://p0-xtjj-private.juejin.cn/tos-cn-i-73owjymdk6/a8f6748d622a497f97fcb9e8cbc4f464~tplv-73owjymdk6-jj-mark-v1:0:0:0:0:5o6Y6YeR5oqA5pyv56S-5Yy6IEAgZGVuZ2xvbmdmZWk=:q75.awebp?policy=eyJ2bSI6MywidWlkIjoiNDI2NTc2MDg0ODM1MjMxMSJ9&rk3s=f64ab15b&x-orig-authkey=f32326d3454f2ac7e96d3d06cdbb035152127018&x-orig-expires=1735147137&x-orig-sign=yNd2PdCGNl4Vww3Z6%2FikrOZXIGo%3D)
+![image](https://github.com/user-attachments/assets/87fd3529-d204-4db9-9d21-82f616951efb)
+![image](https://github.com/user-attachments/assets/c122421a-19eb-470f-a5ef-b77b8b21012d)
 
 **aab**
 
-![image.png](https://p0-xtjj-private.juejin.cn/tos-cn-i-73owjymdk6/6b76046efd5142b99c73d4ec9733dc3b~tplv-73owjymdk6-jj-mark-v1:0:0:0:0:5o6Y6YeR5oqA5pyv56S-5Yy6IEAgZGVuZ2xvbmdmZWk=:q75.awebp?policy=eyJ2bSI6MywidWlkIjoiNDI2NTc2MDg0ODM1MjMxMSJ9&rk3s=f64ab15b&x-orig-authkey=f32326d3454f2ac7e96d3d06cdbb035152127018&x-orig-expires=1735147137&x-orig-sign=KP6PkRLRLQ33lKVnyyxyJupw7lg%3D)
+![image](https://github.com/user-attachments/assets/e65ca13c-0101-482c-9e70-620cb6f0ab6a)
+![image](https://github.com/user-attachments/assets/13bc4dfb-11ab-4607-b90a-834a59ad8bf3)
 
-![image.png](https://p0-xtjj-private.juejin.cn/tos-cn-i-73owjymdk6/e1c071c8405e4343945b788f9701a2da~tplv-73owjymdk6-jj-mark-v1:0:0:0:0:5o6Y6YeR5oqA5pyv56S-5Yy6IEAgZGVuZ2xvbmdmZWk=:q75.awebp?policy=eyJ2bSI6MywidWlkIjoiNDI2NTc2MDg0ODM1MjMxMSJ9&rk3s=f64ab15b&x-orig-authkey=f32326d3454f2ac7e96d3d06cdbb035152127018&x-orig-expires=1735147137&x-orig-sign=VB4zebHz20AmavDH4VJ%2FtKuAkHQ%3D)
+
 
