@@ -1,4 +1,4 @@
-# activityGuard：Android Activity混淆
+# activityGuard：Android activityObfuscator
 **activityGuard** 是一种针对四大组件进行混淆的解决方案，能够在打包时对apk和aab中的Activity、Service、Application和自定义的view进行名称混淆以提升应用的安全性。
 
 ### 目的
