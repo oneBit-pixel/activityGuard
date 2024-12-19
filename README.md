@@ -13,9 +13,9 @@ activityGuard 通过自定义Gradle任务在打包过程中修改替换AndroidMa
 博客 地址[：](url)<https://juejin.cn/post/7449723991638327296>
 ### 使用方法
 
-插件基于Gradle8.0，并且因为基于aapt2生成的aapt_rules.txt来混淆类名，所以项目需要开启  isMinifyEnabled = true
+插件基于Gradle8.0，并且因为基于aapt2生成的aapt_rules.txt来混淆类名，所以项目需要开启  **isMinifyEnabled = true**
 
-每次混淆会在当前项目下生成对应的mapping.txt记录对应混淆类，插件默认会更加mapping.txt文件增量混淆名称，所以当需要不同混淆名时，可以删除mapping.txt文件或者自己实现对应生成规则方法（自己生成时记得确保唯一性）
+每次混淆会在当前项目下生成对应的**mapping.txt**记录对应混淆类，插件默认会更加mapping.txt文件增量混淆名称，所以当需要不同混淆名时，可以删除mapping.txt文件或者自己实现对应生成规则方法（自己生成时记得确保唯一性）
 
 ```
 buildscript {
