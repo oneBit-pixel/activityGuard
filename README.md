@@ -34,8 +34,8 @@ plugins {
 }
 //以下均为非必须
 actGuard {
-    //是否开启
-    isEnable = true
+    //是否开启，默认值 true
+    enable.set(true)
     //不需要混淆的类
     whiteClassList = hashSetOf(
         "com.activityGuard.confuseapp.MainActivity1",
