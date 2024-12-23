@@ -1,16 +1,16 @@
 dir mapping:
-com.activityGuard.confuseapp -》 ac
-com.ndk.model1 -》 bc
-com.activityGuard.view -》 cc
+com.activityGuard.confuseapp -》 ab
+com.ndk.model1 -》 bb
+com.activityGuard.view -》 cb
 
 
 
 class mapping:
-com.activityGuard.confuseapp.MainActivity -> ac.a
-com.activityGuard.confuseapp.MainActivity1 -> ac.b
-com.activityGuard.confuseapp.MainActivity2 -> ac.c
-com.activityGuard.confuseapp.MyApp -> ac.d
-com.activityGuard.confuseapp.MyService -> ac.e
-com.ndk.model1.ModelActivity1 -> bc.a
-com.ndk.model1.ModelActivity2 -> bc.b
-com.activityGuard.view.PlayView -> cc.a
+com.activityGuard.confuseapp.MainActivity -> ab.a
+com.activityGuard.confuseapp.MainActivity1 -> ab.b
+com.activityGuard.confuseapp.MainActivity2 -> ab.c
+com.activityGuard.confuseapp.MyApp -> ab.d
+com.activityGuard.confuseapp.MyService -> ab.e
+com.ndk.model1.ModelActivity1 -> bb.a
+com.ndk.model1.ModelActivity2 -> bb.b
+com.activityGuard.view.PlayView -> cb.a

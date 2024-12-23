@@ -9,7 +9,8 @@ dependencies {
     compileOnly("com.google.code.gson:gson:2.8.5")
     compileOnly(kotlin("stdlib"))
     compileOnly(gradleKotlinDsl())
-    compileOnly("org.ow2.asm:asm-util:9.7")
+    //compileOnly("org.ow2.asm:asm-util:9.7")
+    compileOnly("org.ow2.asm:asm-commons:9.7.1")
     compileOnly("com.google.protobuf:protobuf-java:3.21.12")
     compileOnly("com.google.guava:guava:27.0.1-jre")
     compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
@@ -49,7 +50,7 @@ publishing {
             from(components["java"])
             groupId = "com.github.denglongfei"
             artifactId = "activityGuard"
-            version = "1.0.0"
+            version = "1.1.0"
         }
         repositories {
             maven { url = uri("../repo") }

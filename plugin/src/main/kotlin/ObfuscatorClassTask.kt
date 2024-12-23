@@ -1,9 +1,6 @@
 package com.kotlin
 
-import com.kotlin.asm.ClassNameClassVisitor
-import com.kotlin.model.ObfuscatorMapping
-import com.kotlin.util.LogFileUtil
-import com.kotlin.util.logFileUtil
+import com.kotlin.asm.AsmReMapper
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.Directory
 import org.gradle.api.file.RegularFile
@@ -11,14 +8,13 @@ import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.MapProperty
 import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.ClassWriter
-import org.objectweb.asm.Opcodes
+import org.objectweb.asm.commons.ClassRemapper
 import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -103,11 +99,15 @@ abstract class ObfuscatorClassTask : DefaultTask() {
                     // 对类文件应用 ASM 处理
                     val classReader = ClassReader(it)
                     val classWriter = ClassWriter(ClassWriter.COMPUTE_MAXS)
-                    val classVisitor = ClassNameClassVisitor(
-                        Opcodes.ASM9,
+                    val classVisitor = ClassRemapper(
                         classWriter,
-                        ObfuscatorMapping(classMapping.get())
+                        AsmReMapper(classMapping.get())
                     )
+//                    val classVisitor = ClassNameClassVisitor(
+//                        Opcodes.ASM9,
+//                        classWriter,
+//                        ObfuscatorMapping(classMapping.get())
+//                    )
                     classReader.accept(classVisitor, ClassReader.EXPAND_FRAMES)
                     jarOutput.writeEntity(jarEntry.name, classWriter.toByteArray())
                 }
@@ -132,11 +132,15 @@ abstract class ObfuscatorClassTask : DefaultTask() {
                 file.inputStream().use { inputStream ->
                     val classReader = ClassReader(inputStream)
                     val classWriter = ClassWriter(ClassWriter.COMPUTE_MAXS)
-                    val classVisitor = ClassNameClassVisitor(
-                        Opcodes.ASM9,
+                    val classVisitor = ClassRemapper(
                         classWriter,
-                        ObfuscatorMapping(classMapping.get())
+                        AsmReMapper(classMapping.get())
                     )
+//                    val classVisitor = ClassNameClassVisitor(
+//                        Opcodes.ASM9,
+//                        classWriter,
+//                        ObfuscatorMapping(classMapping.get())
+//                    )
                     classReader.accept(classVisitor, ClassReader.EXPAND_FRAMES)
                     jarOutput.writeEntity(
                         relativePath,

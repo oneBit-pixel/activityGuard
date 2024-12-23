@@ -5,16 +5,18 @@ plugins {
 }
 
 //actGuard {
+//    enable.set(true)
 //
-////    obfuscatorClassFunction={
-////        println("--------obfuscatorClassFunction "+it)
-////        it
-////    }
-//
-////    whiteList = hashSetOf(
-////        "com.activityGuard.confuseapp.MainActivity1",
-////        "*.MainActivity2",
-////    )
+//    whiteClassList.set(
+//        hashSetOf(
+//            "com.activityGuard.confuseapp.MainActivity1",
+//            "*.MainActivity2",
+//        )
+//    )
+//    //类名混淆  com.activityGuard.a  -> a.b
+//    obfuscatorClassFunction = {
+//        it
+//    }
 //}
 
 android {
@@ -133,5 +135,5 @@ dependencies {
 
 
     implementation(project(":model1"))
-   // implementation("com.github.denglongfei:activityGuard:1.0.0")
+    // implementation("com.github.denglongfei:activityGuard:1.0.0")
 }

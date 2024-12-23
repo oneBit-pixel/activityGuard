@@ -9,20 +9,14 @@ import org.gradle.api.tasks.Input
  * 2024/11/25
  */
 abstract class ActivityGuardExtension {
-    /**
-     * Whether to enable the main logic.
-     *
-     * Defaults to `true`.
-     */
+
     @get:Input
     abstract val enable: Property<Boolean>
 
     @get:Input
     abstract val whiteClassList: SetProperty<String>
 
-    //类名混淆
-    var obfuscatorClassFunction: ((String, String) -> String)? = null
+    //类名混淆  com.activityGuard.a  -> a.b
+    var obfuscatorClassFunction: ((String) -> String)? = null
 
-    //目录混淆
-    var obfuscatorDirFunction: ((String) -> String)? = null
 }

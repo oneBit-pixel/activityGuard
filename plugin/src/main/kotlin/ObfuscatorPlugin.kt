@@ -24,7 +24,6 @@ class ObfuscatorPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         val actGuard = project.extensions.create("actGuard", ActivityGuardExtension::class.java)
         actGuard.enable.convention(true)
-
         project.plugins.withType(AppPlugin::class.java) {
             val androidComponents =
                 project.extensions.getByType(ApplicationAndroidComponentsExtension::class.java)

@@ -47,7 +47,7 @@ class ClassNameClassVisitor(
                     }
 
                     else -> {
-                        super.visit(name, value)
+                        super.visit(name, obfuscatorMapping.obfuscatorBootstrapMethodArgumentsItem(value))
                     }
                 }
             }

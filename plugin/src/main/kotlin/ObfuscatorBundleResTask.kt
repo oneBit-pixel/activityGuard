@@ -20,7 +20,6 @@ import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
-import org.gradle.internal.impldep.org.apache.commons.io.FileUtils
 import java.io.File
 import java.util.zip.ZipFile
 import kotlin.io.path.Path
@@ -50,6 +49,7 @@ abstract class ObfuscatorBundleResTask : DefaultTask() {
     private val actGuard: ActivityGuardExtension by lazy {
         project.extensions.getByType(ActivityGuardExtension::class.java)
     }
+    private val obfuscatorUtil by lazy { ObfuscatorUtil(actGuard.obfuscatorClassFunction) }
 
     @TaskAction
     fun taskAction() {
@@ -93,7 +93,7 @@ abstract class ObfuscatorBundleResTask : DefaultTask() {
     private fun obfuscatorRes(outFile: File, classMapping: Map<String, ClassInfo>) {
         val dirName = outFile.parentFile.absolutePath + "/bundleRes"
         File(dirName).also {
-            if(it.exists()){
+            if (it.exists()) {
                 it.delete()
             }
         }
@@ -209,7 +209,6 @@ abstract class ObfuscatorBundleResTask : DefaultTask() {
 //        optimizeBundledRes.copyTo(bundleResFiles.get().asFile, true)
     }
 
-    private val obfuscatorUtil by lazy { ObfuscatorUtil() }
 
     /**
      * 生成混淆后名称 键值对
@@ -227,7 +226,7 @@ abstract class ObfuscatorBundleResTask : DefaultTask() {
             val matchResult = classRegex.find(line)
             if (matchResult != null) {
                 val className = matchResult.groupValues[1]
-                val obfuscatorClassName = obfuscatorClassName(className, dirMapping, classMapping)
+                val obfuscatorClassName = obfuscatorClassName(className, classMapping)
                 if (obfuscatorClassName != className) {
                     classMapping[className] = ClassInfo(obfuscatorClassName, false)
                 }
@@ -245,7 +244,6 @@ abstract class ObfuscatorBundleResTask : DefaultTask() {
      */
     private fun obfuscatorClassName(
         className: String,
-        dirMapping: MutableMap<String, String>,
         classMapping: LinkedHashMap<String, ClassInfo>
     ): String {
         if (className.startsWith("androidx.")
@@ -263,45 +261,7 @@ abstract class ObfuscatorBundleResTask : DefaultTask() {
         if (obfuscatorName != null) {
             return obfuscatorName.obfuscatorClassName
         }
-
-        val lastDotIndex = className.lastIndexOf('.')
-        val dirName = className.substring(0, lastDotIndex)
-        val nameClass = className.substring(lastDotIndex + 1)
-
-        //混淆目录
-        val newDirName = dirMapping[dirName] ?: let {
-            val newDir = generateDirName(dirName)
-            dirMapping[dirName] = newDir
-            newDir
-        }
-        //混淆类名
-        val newClassName = generateClassName(nameClass, newDirName, dirName)
-        return "$newDirName.$newClassName"
-
-    }
-
-
-    /**
-     * 生成混淆后目录
-     */
-    private fun generateDirName(dirName: String): String {
-        val function = actGuard.obfuscatorDirFunction
-        return function?.invoke(dirName) ?: obfuscatorUtil.getObfuscatedClassDir()
-    }
-
-    /**
-     * 生成混淆后名称
-     */
-    private fun generateClassName(
-        className: String,
-        obfuscatorDirName: String,
-        dirName: String
-    ): String {
-        val function = actGuard.obfuscatorClassFunction
-        return function?.invoke(className, dirName) ?: obfuscatorUtil.getObfuscatedClassName(
-            obfuscatorDirName
-        )
-
+        return obfuscatorUtil.getObfuscatedClassName(className)
     }
 
 
@@ -325,13 +285,9 @@ abstract class ObfuscatorBundleResTask : DefaultTask() {
                 return true
             }
         }
-        if (className.startsWith("androidx.")
-            || className.startsWith("android.")
-            || className.startsWith("com.google.")
-        ) {
-            return false
-        }
-        return false
+        return (className.startsWith("androidx.")
+                || className.startsWith("android.")
+                || className.startsWith("com.google."))
     }
 
 
