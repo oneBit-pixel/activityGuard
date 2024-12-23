@@ -48,7 +48,7 @@ abstract class ObfuscatorBundleResTask : DefaultTask() {
 
 
     private val actGuard: ActivityGuardExtension by lazy {
-        project.extensions.getByType(ActivityGuardExtension::class.java) ?: ActivityGuardExtension()
+        project.extensions.getByType(ActivityGuardExtension::class.java)
     }
 
     @TaskAction
@@ -307,7 +307,7 @@ abstract class ObfuscatorBundleResTask : DefaultTask() {
 
     //白名单正则表达式
     private val regexPatterns by lazy {
-        actGuard.whiteClassList.map { pattern ->
+        actGuard.whiteClassList.get().map { pattern ->
             pattern
                 .replace("*", ".*") // 将 '*' 替换为 '.*'（匹配零个或多个字符）
                 .replace("?", ".?") // 将 '?' 替换为 '.?'（匹配零个或一个字符）

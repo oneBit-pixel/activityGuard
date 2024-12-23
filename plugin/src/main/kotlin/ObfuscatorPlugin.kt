@@ -22,15 +22,14 @@ import java.io.File
  */
 class ObfuscatorPlugin : Plugin<Project> {
     override fun apply(project: Project) {
-        project.extensions.create("actGuard", ActivityGuardExtension::class.java)
+        val actGuard = project.extensions.create("actGuard", ActivityGuardExtension::class.java)
+        actGuard.enable.convention(true)
+
         project.plugins.withType(AppPlugin::class.java) {
             val androidComponents =
                 project.extensions.getByType(ApplicationAndroidComponentsExtension::class.java)
             androidComponents.onVariants { variant ->
-
-                val actGuard = project.extensions.getByType(ActivityGuardExtension::class.java)
-                    ?: ActivityGuardExtension()
-                if (!actGuard.isEnable) {
+                if (!actGuard.enable.get()) {
                     return@onVariants
                 }
                 val artifacts = variant.artifacts as? ArtifactsImpl ?: return@onVariants
