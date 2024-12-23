@@ -23,7 +23,7 @@ buildscript {
         maven { url 'https://jitpack.io' }
     }
     dependencies {
-        classpath "com.github.denglongfei:activityGuard:1.0.0"
+        classpath "com.github.denglongfei:activityGuard:1.1.0"
     }
 }
 ```
@@ -33,24 +33,22 @@ plugins {
     id("activityGuard")
 }
 //以下均为非必须
-actGuard {
-    //是否开启，默认值 true
-    enable.set(true)
-    //不需要混淆的类
-    whiteClassList = hashSetOf(
-        "com.activityGuard.confuseapp.MainActivity1",
-        "*.MainActivity2",
-    )
-    //自己实现混淆类名时
-//    //目录混淆
-//    obfuscatorDirFunction={ dirName->
-//        dirName
+//actGuard {
+//    //是否开启
+//    enable.set(true)
+//    //不需要混淆的类
+//    whiteClassList.set(
+//        hashSetOf(
+//            "com.activityGuard.confuseapp.MainActivity1",
+//            "*.MainActivity2",
+//        )
+//    )
+//    //类名混淆  com.activityGuard.a  -> a.b
+//    obfuscatorClassFunction = {
+//        it
 //    }
-//    //类名混淆
-//    obfuscatorClassFunction= { className, dirName->
-//        className
-//    }
-}
+//}
+
 ```
 
 #### AAB混淆
