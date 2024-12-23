@@ -32,14 +32,14 @@ java {
 }
 
 group = "com.github.denglongfei"
-version = "1.0.0"
+version = "1.1.0"
 gradlePlugin {
     plugins {
         create("actGuardPlugin") {
             id = "activityGuard"
             group = "com.github.denglongfei"
             description = "activityGuard"
-            version = "1.0.0"
+            version = "1.1.0"
             implementationClass = "com.kotlin.ObfuscatorPlugin"
         }
     }
