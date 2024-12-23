@@ -8,6 +8,6 @@ plugins {
 
 buildscript {
     dependencies {
-        classpath("com.github.denglongfei:activityGuard:1.1.0")
+     classpath("com.github.denglongfei:activityGuard:1.1.1")
     }
 }

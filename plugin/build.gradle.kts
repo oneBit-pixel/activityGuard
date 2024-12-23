@@ -32,14 +32,14 @@ java {
 }
 
 group = "com.github.denglongfei"
-version = "1.1.0"
+version = "1.1.1"
 gradlePlugin {
     plugins {
         create("actGuardPlugin") {
             id = "activityGuard"
             group = "com.github.denglongfei"
             description = "activityGuard"
-            version = "1.1.0"
+            version = "1.1.1"
             implementationClass = "com.kotlin.ObfuscatorPlugin"
         }
     }
@@ -50,7 +50,7 @@ publishing {
             from(components["java"])
             groupId = "com.github.denglongfei"
             artifactId = "activityGuard"
-            version = "1.1.0"
+            version = "1.1.1"
         }
         repositories {
             maven { url = uri("../repo") }
