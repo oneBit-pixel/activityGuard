@@ -31,15 +31,16 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
+val mVersion = project.property("mVersion").toString()
 group = "com.github.denglongfei"
-version = "1.1.1"
+version = mVersion
 gradlePlugin {
     plugins {
         create("actGuardPlugin") {
             id = "activityGuard"
             group = "com.github.denglongfei"
             description = "activityGuard"
-            version = "1.1.1"
+            version = mVersion
             implementationClass = "com.kotlin.ObfuscatorPlugin"
         }
     }
@@ -50,7 +51,7 @@ publishing {
             from(components["java"])
             groupId = "com.github.denglongfei"
             artifactId = "activityGuard"
-            version = "1.1.1"
+            version = mVersion
         }
         repositories {
             maven { url = uri("../repo") }
