@@ -24,8 +24,9 @@ class ObfuscatorUtil(private val obfuscatorClassFunction: ((String) -> String)?)
         this.dirMapping = dirMapping
         classMapping.forEach {
             val (dir, name) = getClassDirAndName(it.key)
-            val (_, obfuscatorName) = getClassDirAndName(it.value.obfuscatorClassName)
+            val (obfuscatorDir, obfuscatorName) = getClassDirAndName(it.value.obfuscatorClassName)
             dirAndClassList.getOrPut(dir) { LinkedHashMap() }[name] = obfuscatorName
+            dirMapping[dir] = obfuscatorDir
         }
     }
 
