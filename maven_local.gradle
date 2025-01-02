@@ -1,0 +1,17 @@
+apply plugin: 'maven-publish'
+
+publishing {
+    publications {
+        actGuardPlugin(MavenPublication) {
+            from components.java
+            groupId mGroup
+            artifactId mId
+            version mVersion
+        }
+    }
+    repositories {
+        maven {
+            url = "${rootProject.projectDir}/repo"
+        }
+    }
+}

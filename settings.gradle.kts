@@ -1,5 +1,3 @@
-include(":model1")
-
 pluginManagement {
     repositories {
         google {
@@ -11,7 +9,9 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
+        //maven { url = uri("https://jitpack.io") }
         maven { url = uri("./repo") }
+
     }
 }
 dependencyResolutionManagement {
@@ -23,6 +23,12 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "ConfuseApp"
+rootProject.name = "activityGuard"
 include(":app")
-include(":plugin")
+include(":model1")
+
+include(":plugin_main")
+include(":plugin_common")
+include(":plugin_agp_v74")
+include(":plugin_agp_v86")
+include(":plugin_agp_v87")
