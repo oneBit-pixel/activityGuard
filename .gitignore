@@ -15,3 +15,8 @@
 local.properties
 /plugin/build/
 /repo/
+/plugin_agp_v86/build/
+/plugin_agp_v74/build/
+/plugin_agp_v87/build/
+/plugin_common/build/
+/plugin_main/build/

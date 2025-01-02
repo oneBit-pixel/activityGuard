@@ -6,13 +6,17 @@
       <GradleProjectSettings>
         <option name="testRunner" value="CHOOSE_PER_TEST" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
+        <option name="gradleJvm" value="jbr-17" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/model1" />
-            <option value="$PROJECT_DIR$/plugin" />
+            <option value="$PROJECT_DIR$/plugin_agp_v74" />
+            <option value="$PROJECT_DIR$/plugin_agp_v86" />
+            <option value="$PROJECT_DIR$/plugin_agp_v87" />
+            <option value="$PROJECT_DIR$/plugin_common" />
+            <option value="$PROJECT_DIR$/plugin_main" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

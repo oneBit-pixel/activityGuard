@@ -1,17 +1,14 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-//    id("activityGuard")
+    //id("activityGuard")
 }
 
 //actGuard {
-//    enable.set(true)
-//
-//    whiteClassList.set(
-//        hashSetOf(
-//            "com.activityGuard.confuseapp.MainActivity1",
-//            "*.MainActivity2",
-//        )
+//    isEnable = true
+//    whiteClassList = hashSetOf(
+//        "com.activityGuard.confuseapp.MainActivity1",
+//        "*.MainActivity2",
 //    )
 //    //类名混淆  com.activityGuard.a  -> a.b
 //    obfuscatorClassFunction = {
@@ -103,11 +100,11 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
     }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
+//    packaging {
+//        resources {
+//            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+//        }
+//    }
 }
 
 dependencies {
