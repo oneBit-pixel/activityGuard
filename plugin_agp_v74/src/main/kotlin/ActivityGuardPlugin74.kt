@@ -2,6 +2,7 @@ package com.kotlin
 
 import com.android.build.api.artifact.ScopedArtifact
 import com.android.build.api.artifact.impl.ArtifactsImpl
+import com.android.build.api.component.analytics.AnalyticsEnabledArtifacts
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.android.build.api.variant.ScopedArtifacts
 import com.android.build.gradle.AppPlugin
@@ -43,9 +44,10 @@ class ActivityGuardPlugin74{
                     println("activityGuard:Not executed, please open isMinifyEnabled ")
                     return@onVariants
                 }
-                val artifacts = variant.artifacts as? ArtifactsImpl ?: let {
-                    println("activityGuard:Not executed, variant.artifacts is ${variant.artifacts::class} no  ArtifactsImpl")
-                    return@onVariants
+                val artifacts = if (variant.artifacts is AnalyticsEnabledArtifacts) {
+                    (variant.artifacts as AnalyticsEnabledArtifacts).delegate as ArtifactsImpl
+                } else {
+                    variant.artifacts as ArtifactsImpl
                 }
                 println("activityGuard: start executed...")
                 val variantName = variant.name.capitalized()

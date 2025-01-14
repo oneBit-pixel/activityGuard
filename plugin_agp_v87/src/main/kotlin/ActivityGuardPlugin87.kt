@@ -4,13 +4,14 @@ import com.android.build.api.artifact.ArtifactTransformationRequest
 import com.android.build.api.artifact.ScopedArtifact
 import com.android.build.api.artifact.impl.ArtifactsImpl
 import com.android.build.api.artifact.impl.InAndOutDirectoryOperationRequestImpl
+import com.android.build.api.component.analytics.AnalyticsEnabledArtifacts
+import com.android.build.api.component.analytics.AnalyticsEnabledInAndOutDirectoryOperationRequest
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.android.build.api.variant.ScopedArtifacts
 import com.android.build.gradle.AppPlugin
 import com.android.build.gradle.internal.res.Aapt2FromMaven.Companion.create
 import com.android.build.gradle.internal.scope.InternalArtifactType
 import com.android.build.gradle.internal.services.Aapt2Input
-import com.android.build.gradle.internal.services.getBuildService
 import com.android.build.gradle.internal.utils.setDisallowChanges
 import com.kotlin.model.ActivityGuardExtension
 import org.gradle.api.Project
@@ -43,11 +44,11 @@ class ActivityGuardPlugin87 {
                     println("activityGuard:Not executed, please open isMinifyEnabled ")
                     return@onVariants
                 }
-                val artifacts = variant.artifacts as? ArtifactsImpl ?: let {
-                    println("activityGuard:Not executed, variant.artifacts is ${variant.artifacts::class} no  ArtifactsImpl")
-                    return@onVariants
+                val artifacts = if (variant.artifacts is AnalyticsEnabledArtifacts) {
+                    (variant.artifacts as AnalyticsEnabledArtifacts).delegate as ArtifactsImpl
+                } else {
+                    variant.artifacts as ArtifactsImpl
                 }
-
                 println("activityGuard: start executed...")
                 val variantName = variant.name.capitalized()
                 //bundle 资源
@@ -68,11 +69,16 @@ class ActivityGuardPlugin87 {
                 val apkTask =
                     project.tasks.register<ActivityGuardApkTask>("activityGuard${variantName}ApkTask")
 
-                val request = variant.artifacts.use(apkTask)
+                var request = variant.artifacts.use(apkTask)
                     .wiredWithDirectories(
                         ActivityGuardApkTask::inputProcessedRes,
                         ActivityGuardApkTask::outputProcessedRes
-                    ) as InAndOutDirectoryOperationRequestImpl
+                    )
+                request = if (request is AnalyticsEnabledInAndOutDirectoryOperationRequest) {
+                    request.delegate as InAndOutDirectoryOperationRequestImpl
+                } else {
+                    request as InAndOutDirectoryOperationRequestImpl
+                }
                 val transformationRequest = invokeOverloadedMethod(
                     request,
                     "toTransformMany",

@@ -4,6 +4,8 @@ import com.android.build.api.artifact.ArtifactTransformationRequest
 import com.android.build.api.artifact.ScopedArtifact
 import com.android.build.api.artifact.impl.ArtifactsImpl
 import com.android.build.api.artifact.impl.InAndOutDirectoryOperationRequestImpl
+import com.android.build.api.component.analytics.AnalyticsEnabledArtifacts
+import com.android.build.api.component.analytics.AnalyticsEnabledInAndOutDirectoryOperationRequest
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.android.build.api.variant.ScopedArtifacts
 import com.android.build.gradle.AppPlugin
@@ -31,7 +33,7 @@ import util.invokeOverloadedMethod
  * 2024/12/27
  */
 class ActivityGuardPlugin86 {
-     fun apply(project: Project) {
+    fun apply(project: Project) {
         val actGuard = project.extensions.create("actGuard", ActivityGuardExtension::class.java)
             ?: ActivityGuardExtension()
         project.plugins.withType(AppPlugin::class.java) {
@@ -49,11 +51,11 @@ class ActivityGuardPlugin86 {
                     println("activityGuard:Not executed, please open isMinifyEnabled ")
                     return@onVariants
                 }
-                val artifacts = variant.artifacts as? ArtifactsImpl ?: let {
-                    println("activityGuard:Not executed, variant.artifacts is ${variant.artifacts::class} no  ArtifactsImpl")
-                    return@onVariants
+                val artifacts = if (variant.artifacts is AnalyticsEnabledArtifacts) {
+                    (variant.artifacts as AnalyticsEnabledArtifacts).delegate as ArtifactsImpl
+                } else {
+                    variant.artifacts as ArtifactsImpl
                 }
-
                 println("activityGuard: start executed...")
                 val variantName = variant.name.capitalized()
                 //bundle 资源
@@ -74,11 +76,16 @@ class ActivityGuardPlugin86 {
                 val apkTask =
                     project.tasks.register<ActivityGuardApkTask>("activityGuard${variantName}ApkTask")
 
-                val request = variant.artifacts.use(apkTask)
+                var request = variant.artifacts.use(apkTask)
                     .wiredWithDirectories(
                         ActivityGuardApkTask::inputProcessedRes,
                         ActivityGuardApkTask::outputProcessedRes
-                    ) as InAndOutDirectoryOperationRequestImpl
+                    )
+                request = if (request is AnalyticsEnabledInAndOutDirectoryOperationRequest) {
+                    request.delegate as InAndOutDirectoryOperationRequestImpl
+                } else {
+                    request as InAndOutDirectoryOperationRequestImpl
+                }
                 val transformationRequest = invokeOverloadedMethod(
                     request,
                     "toTransformMany",
@@ -87,7 +94,7 @@ class ActivityGuardPlugin86 {
                 ) as ArtifactTransformationRequest<ActivityGuardApkTask>
 
                 apkTask.configure {
-                    buildAapt2Input(project,it.aapt2)
+                    buildAapt2Input(project, it.aapt2)
                     project.layout.buildDirectory.dir(
                         "intermediates/activityGuardApkResTask/" +
                                 "${variantName}/${apkTask.name}"
@@ -127,7 +134,7 @@ class ActivityGuardPlugin86 {
         }
     }
 
-    fun <ServiceT : BuildService<ParamsT>, ParamsT: BuildServiceParameters> getBuildService(
+    fun <ServiceT : BuildService<ParamsT>, ParamsT : BuildServiceParameters> getBuildService(
         buildServiceRegistry: BuildServiceRegistry,
         buildServiceClass: Class<ServiceT>
     ): Provider<ServiceT> {
@@ -136,6 +143,7 @@ class ActivityGuardPlugin86 {
             throw IllegalStateException("Service $serviceName is not registered.")
         }
     }
+
     /**
      * 配置aapt
      */
