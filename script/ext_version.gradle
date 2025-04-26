@@ -1,0 +1,25 @@
+import groovy.json.StringEscapeUtils
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+ext {
+    createMavenInfo = { groupId, name, version ->
+        [groupId: groupId as String, name: name, version: version, path: "$groupId:$name:$version"]
+    }
+    getProductConfig = {
+        def jsonSlurper = new JsonSlurper()
+        if (isLocal.toBoolean()) {
+            def configFile = file("$rootDir/product/project-tab-config.json")
+            def tabJson = jsonSlurper.parseText(configFile.text).product.find { singleid.contains("${it.singleId}") }
+            def jsonString = JsonOutput.toJson(tabJson)
+            // 使用 String.replace() 来去掉转义的 Unicode 字符
+            return StringEscapeUtils.unescapeJava(jsonString)
+        }else {
+            def configFile = file("$rootDir/product/project-tab-config.json")
+            def tabJson = jsonSlurper.parseText(configFile.text).product.find { singleid.contains("${it.singleId}") }
+            def jsonString =  JsonOutput.toJson(tabJson)
+            // 使用 String.replace() 来去掉转义的 Unicode 字符
+            return StringEscapeUtils.unescapeJava(jsonString)
+        }
+    }
+}
+

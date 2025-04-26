@@ -3,6 +3,13 @@ plugins {
     kotlin("jvm")
 }
 
+ext {
+    // 直接通过 project.property 读取属性
+    set("mavenGroup", "com.opb.plugin.guard")
+    set("mavenId", "plugin_common")
+    set("mavenVersion", "1.0.0-250406-5")
+}
+apply(from = "${rootDir}/script/common-plugin.gradle")
 
 dependencies {
     compileOnly("com.google.code.gson:gson:2.8.5")
@@ -21,13 +28,14 @@ dependencies {
 }
 
 
+
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
 }
 
 
-apply(from = "../maven_local.gradle")
+
 
 
 

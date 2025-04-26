@@ -11,7 +11,6 @@ import com.android.build.gradle.internal.scope.InternalArtifactType
 import com.android.build.gradle.internal.services.Aapt2DaemonBuildService
 import com.android.build.gradle.internal.services.Aapt2Input
 import com.android.build.gradle.internal.services.Aapt2ThreadPoolBuildService
-import com.android.build.gradle.internal.services.getBuildService
 import com.android.build.gradle.internal.services.getBuildServiceName
 import com.android.build.gradle.internal.utils.setDisallowChanges
 import com.kotlin.model.ActivityGuardExtension

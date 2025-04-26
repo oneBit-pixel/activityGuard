@@ -1,3 +1,18 @@
+buildscript {
+    repositories {
+        maven {
+            isAllowInsecureProtocol = true
+            url = uri("http://localhost:8081/repository/maven-releases/")
+            credentials {
+                username = "zxy"
+                password = "123456"
+            }
+        }
+    }
+    dependencies {
+        classpath("com.opb.plugin:activityGurad:1.0.2")
+    }
+}
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.jetbrains.kotlin.android) apply false
@@ -6,9 +21,4 @@ plugins {
 }
 
 
-buildscript {
-    val mVersion = project.property("mVersion").toString()
-    dependencies {
-        //classpath("com.github.denglongfei:activityGuard:$mVersion")
-    }
-}
+

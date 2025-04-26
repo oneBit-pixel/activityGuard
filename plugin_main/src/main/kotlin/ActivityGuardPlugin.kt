@@ -15,7 +15,7 @@ class ActivityGuardPlugin : Plugin<Project> {
         val agpVersion = getAGPVersion(project)
         println("activityGuard:agpVersion $agpVersion")
         when {
-            //大于等于 8.6.0
+            //大于等于 8.7.0
             compareVersions(agpVersion, "8.7.0") != -1 -> {
                 ActivityGuardPlugin87().apply(project)
             }

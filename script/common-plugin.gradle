@@ -1,0 +1,28 @@
+apply plugin: "kotlin"
+apply plugin: "maven-publish"
+
+project.afterEvaluate {
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                from components.java
+                group = mavenGroup
+                artifactId = mavenId
+                version = mavenVersion
+
+                repositories {
+                    repositories {
+                        maven {
+                            allowInsecureProtocol = true
+                            url = uri("http://localhost:8081/repository/maven-releases/")
+                            credentials {
+                                username = "zxy"
+                                password = "123456"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

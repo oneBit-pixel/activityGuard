@@ -1,0 +1,31 @@
+apply plugin: "maven-publish"
+
+project.afterEvaluate {
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                from components.release
+                group = mavenGroup
+                artifactId = mavenId
+                version = mavenVersion
+            }
+        }
+        repositories {
+            if (isLocal.toBoolean()) {
+                maven {
+                    // 设置本地路径
+                    url = uri("file://${rootDir}/local-repo")
+                }
+            }else {
+                maven {
+                    allowInsecureProtocol = true
+                    url = uri("http://localhost:8081/repository/maven-releases/")
+                    credentials {
+                        username = "zxy"
+                        password = "123456"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -11,42 +11,38 @@ dependencies {
     compileOnly("com.android.tools:common:31.6.0")
     compileOnly("com.android.tools:sdk-common:31.1.4")
     testImplementation("junit:junit:4.13")
-    implementation(project(":plugin_common"))
 
-    implementation(project(":plugin_agp_v74"))
-    implementation(project(":plugin_agp_v86"))
-    implementation(project(":plugin_agp_v87"))
-
+    implementation("com.opb.plugin.guard:plugin_agp_v74:1.0.0-250406-5")
+    implementation("com.opb.plugin.guard:plugin_common:1.0.0-250406-5")
+    implementation("com.opb.plugin.guard:plugin_agp_v86:1.0.0-250406-5")
+    implementation("com.opb.plugin.guard:plugin_agp_v87:1.0.0-250406-5")
 }
-
-
-
 
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
 }
+ext {
+    // 直接通过 project.property 读取属性
+    set("mavenGroup", "com.opb.plugin")
+    set("mavenId", "activityGurad")
+    set("mavenVersion", "1.0.2")
+}
+apply(from = "${rootDir}/script/common-plugin.gradle")
 
-apply(from = "../maven_local.gradle")
 
-
-val mGroup = project.property("mGroup").toString()
-val mId = project.property("mId").toString()
-val mVersion = project.property("mVersion").toString()
 
 
 gradlePlugin {
     plugins {
         create("actGuardPlugin") {
-            id = mId
-            group = mGroup
-            version = mVersion
+            id = "com.opb.plugin"
             implementationClass = "com.kotlin.ActivityGuardPlugin"
+            version = "1.0.2"
         }
     }
 }
-
 
 
 

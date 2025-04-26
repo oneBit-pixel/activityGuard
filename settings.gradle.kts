@@ -9,10 +9,18 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
-        //maven { url = uri("https://jitpack.io") }
-        maven { url = uri("./repo") }
+
+        maven {
+            isAllowInsecureProtocol = true
+            url = uri("http://localhost:8081/repository/maven-releases/")
+            credentials {
+                username = "zxy"
+                password = "123456"
+            }
+        }
 
     }
+
 }
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
@@ -20,6 +28,16 @@ dependencyResolutionManagement {
         mavenCentral()
         google()
         maven { url = uri("https://jitpack.io") }
+
+
+        maven {
+            isAllowInsecureProtocol = true
+            url = uri("http://localhost:8081/repository/maven-releases/")
+            credentials {
+                username = "zxy"
+                password = "123456"
+            }
+        }
     }
 }
 

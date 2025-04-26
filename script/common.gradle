@@ -1,0 +1,191 @@
+//android gradle 通用模板
+//1. 自动辨别模块和app打包项目
+//2. 带有android基础库
+//3. 子模块具有调试功能
+project.ext {
+    //app
+    setAppDefaultConfig = {
+        project.apply plugin: "com.android.application"
+        project.apply plugin: "kotlin-android"
+        project.apply plugin: "kotlin-kapt"
+        project.apply plugin: "org.jetbrains.kotlin.android"
+        project.apply plugin: "org.jetbrains.kotlin.plugin.compose"
+        project.apply plugin: "therouter"
+
+
+        setAndroidDependencies project.dependencies
+        setComposeDependecies project.dependencies
+        setTheRouterDependices project.dependencies
+
+        project.android {
+            compileSdk = libs.versions.compileSdk.get().toInteger()
+            namespace = "com.debug.opb"
+
+            if (project.name != "app") {
+                if (isModuleDebug) {
+                    flavorDimensions "modules"
+                    productFlavors {
+                        modules {}
+                    }
+
+                    sourceSets {
+                        main {
+                            manifest.srcFile 'src/main/AndroidManifest.xml'
+                            java.srcDirs = ['src/main/java']
+                            res.srcDirs = ['src/main/res']
+                            assets.srcDirs = ['src/main/assets']
+                        }
+                        modules {
+                            manifest.srcFile 'src/modules/AndroidManifest.xml'
+                            java.srcDirs = ['src/modules/java']
+                            res.srcDirs = ['src/modules/res']
+                            assets.srcDirs = ['src/modules/assets']
+                        }
+                    }
+                }
+            }
+
+            defaultConfig {
+                minSdk libs.versions.minSdk.get().toInteger()
+                targetSdk libs.versions.targetSdk.get().toInteger()
+
+                consumerProguardFiles "consumer-rules.pro"
+            }
+
+            compileOptions {
+                sourceCompatibility JavaVersion.VERSION_11
+                targetCompatibility JavaVersion.VERSION_11
+            }
+
+            kotlinOptions {
+                jvmTarget = "11"
+            }
+            buildFeatures {
+                compose = true
+                viewBinding = true
+                buildConfig = true
+            }
+            buildTypes {
+                debug {
+                    debuggable true
+                    minifyEnabled false
+                    proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+                }
+
+                release {
+                    minifyEnabled true
+                    proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+                }
+            }
+        }
+    }
+
+    //library
+    setLibDefaultConfig = {
+        project.apply plugin: "com.android.library"
+        project.apply plugin: "kotlin-android"
+        project.apply plugin: "kotlin-kapt"
+        project.apply plugin: "org.jetbrains.kotlin.android"
+        project.apply plugin: "org.jetbrains.kotlin.plugin.compose"
+
+        setAndroidDependencies project.dependencies
+        setComposeDependecies project.dependencies
+        setTheRouterDependices project.dependencies
+
+        project.android {
+            compileSdk = libs.versions.compileSdk.get().toInteger()
+
+            defaultConfig {
+                minSdk libs.versions.minSdk.get().toInteger()
+                targetSdk libs.versions.targetSdk.get().toInteger()
+
+                consumerProguardFiles "consumer-rules.pro"
+            }
+            compileOptions {
+                sourceCompatibility JavaVersion.VERSION_11
+                targetCompatibility JavaVersion.VERSION_11
+            }
+            kotlinOptions {
+                jvmTarget = "11"
+            }
+            buildFeatures {
+                compose = true
+                viewBinding = true
+                dataBinding = true
+                buildConfig = true
+            }
+            buildTypes {
+                debug {
+                    minifyEnabled false
+                    proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+                }
+                release {
+                    minifyEnabled false
+                    proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+                }
+            }
+
+        }
+    }
+
+    //android 基础依赖
+    setAndroidDependencies = {
+        dependencies {
+            // ShapeView：https://github.com/getActivity/ShapeView
+            implementation libs.shapeview
+            // ShapeDrawable：https://github.com/getActivity/ShapeDrawable
+            implementation libs.shapedrawable
+
+            //官方
+            implementation libs.androidx.core.ktx
+            implementation libs.androidx.appcompat
+            implementation libs.material
+            implementation libs.androidx.activity
+            implementation libs.androidx.constraintlayout
+            //fragment
+            implementation libs.androidx.fragment.ktx
+            //lifecycle
+            implementation "androidx.lifecycle:lifecycle-runtime-android:2.8.7"
+            implementation libs.androidx.lifecycle.runtime.ktx
+
+            testImplementation libs.junit
+            androidTestImplementation libs.androidx.junit
+            androidTestImplementation libs.androidx.espresso.core
+
+        }
+    }
+
+    //compose基础依赖
+    setComposeDependecies = {
+        dependencies {
+            implementation libs.androidx.activity.compose
+            implementation platform(libs.androidx.compose.bom)
+            implementation libs.androidx.ui
+            implementation libs.androidx.ui.graphics
+            implementation libs.androidx.ui.tooling.preview
+            implementation libs.androidx.material3
+            testImplementation libs.junit
+            androidTestImplementation libs.androidx.junit
+            androidTestImplementation libs.androidx.espresso.core
+            androidTestImplementation platform(libs.androidx.compose.bom)
+            androidTestImplementation libs.androidx.ui.test.junit4
+            debugImplementation libs.androidx.ui.tooling
+            debugImplementation libs.androidx.ui.test.manifest
+        }
+    }
+
+//架构依赖theRouter
+    setTheRouterDependices = {
+        dependencies {
+            implementation(libs.router)
+            kapt(libs.theRouter)
+        }
+    }
+}
+
+def libDebug = project.ext.has("isModuleDebug") ? project.ext.isModuleDebug.toBoolean() : false
+if (project.name == "app" || libDebug) {
+    project.setAppDefaultConfig project
+} else {
+    project.setLibDefaultConfig project
+}
